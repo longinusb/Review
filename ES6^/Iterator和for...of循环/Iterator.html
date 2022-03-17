@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      //集合：Array、Object、Set、Map
+      // Iterator 的作用有三个：
+      // 一是为各种数据结构，提供一个统一的、简便的访问接口；
+      // 二是使得数据结构的成员能够按某种次序排列；
+      // 三是 ES6 创造了一种新的遍历命令for...of循环，Iterator 接口主要供for...of消费。
+
+      //模拟next方法
+      //   var it = makeIterator(["a", "b"]);
+
+      //   it.next();
+      //   it.next();
+      //   it.next();
+
+      //   function makeIterator(array) {
+      //     var nextIndex = 0;
+      //     return {
+      //       next: function () {
+      //         return nextIndex < array.length
+      //           ? { value: array[nextIndex++], done: false }
+      //           : { value: undefined, done: true };
+      //       },
+      //     };
+      //   }
+
+      //原生具备Iterator接口的数据结构：Array、Map、Set、String、TypedArray、函数的argument对象、NodeList对象
+      //   let arr = ["a", "b", "c"];
+      //   let iter = arr[Symbol.iterator]();
+
+      //本质上，遍历器是一种线性处理，对于任何非线性的数据结构，部署遍历器接口，就等于部署一种线性转换.
+      //类部署Iterator接口
+      //   class RangeIterator {
+      //     constructor(start, stop) {
+      //       this.value = start;
+      //       this.stop = stop;
+      //     }
+
+      //     [Symbol.iterator]() {
+      //       return this;
+      //     }
+
+      //     next() {
+      //       var value = this.value;
+      //       if (value < this.stop) {
+      //         this.value++;
+      //         return { done: false, value: value };
+      //       }
+      //       return { done: true, value: undefined };
+      //     }
+      //   }
+
+      //   function range(start, stop) {
+      //     return new RangeIterator(start, stop);
+      //   }
+
+      //   for (var value of range(0, 3)) {
+      //     console.log(value);
+      //   }
+
+      //通过遍历器实现链表结构
+      //   function Obj(value) {
+      //     this.value = value;
+      //     this.next = null;
+      //   }
+
+      //   Obj.prototype[Symbol.iterator] = function () {
+      //     var iterator = { next: next };
+      //     var current = this;
+      //     function next() {
+      //       if (current) {
+      //         var value = current.value;
+      //         current = current.next;
+      //         return { done: false, value: value };
+      //       }
+      //       return { done: true };
+      //     }
+      //     return iterator;
+      //   };
+
+      //   var one = new Obj(1);
+      //   var two = new Obj(2);
+      //   var three = new Obj(3);
+
+      //   one.next = two;
+      //   two.next = three;
+
+      //   for (var i of one) {
+      //     console.log(i);
+      //   }
+
+      //为对象添加Iterator接口
+      //   let Obj = {
+      //     data: ["hello", "world"],
+      //     [Symbol.iterator]() {
+      //       const self = this;
+      //       let index = 0;
+      //       return {
+      //         next() {
+      //           if (index < self.data.length) {
+      //             return {
+      //               value: self.data[idnex++],
+      //               done: false,
+      //             };
+      //           }
+      //           return { vlaue: undefined, done: true };
+      //         },
+      //       };
+      //     },
+      //   };
+
+      //类似数组的对象（存在数值键名和length属性）
+      //   NodeList.prototype[Symbol.iterator] = Array.prototype[Symbol.iterator];
+      //   NodeList.prototype[Symbol.iterator] = [][Symbol.iterator];
+
+      //   [...document.querySelectorAll("div")];
+
+      //覆盖原生的Symbol.iterator方法，达到修改遍历器行为的目的
+      //   var str = new Srting("hi");
+      //   [...str];
+
+      //   str[Symbol.iterator] = function () {
+      //     return {
+      //       next: function () {
+      //         if (this_first) {
+      //           this._first = false;
+      //           return { value: "bye", done: false };
+      //         } else {
+      //           return { done: true };
+      //         }
+      //       },
+      //       _first: true,
+      //     };
+      //   };
+
+      //   [...str];
+      //   str;ç
+
+      function readLinesSync(file) {
+        return {
+          [Symbol.iterator]() {
+            return {
+              next() {
+                return { done: false };
+              },
+              return() {
+                file.close();
+                return { done: true };
+              },
+            };
+          },
+        };
+      }
+    </script>
+  </body>
+</html>
