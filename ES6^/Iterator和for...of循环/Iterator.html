@@ -143,20 +143,37 @@
       //   [...str];
       //   str;ç
 
-      function readLinesSync(file) {
-        return {
-          [Symbol.iterator]() {
-            return {
-              next() {
-                return { done: false };
-              },
-              return() {
-                file.close();
-                return { done: true };
-              },
-            };
-          },
-        };
+      //   function readLinesSync(file) {
+      //     return {
+      //       [Symbol.iterator]() {
+      //         return {
+      //           next() {
+      //             return { done: false };
+      //           },
+      //           return() {
+      //             file.close();
+      //             return { done: true };
+      //           },
+      //         };
+      //       },
+      //     };
+      //   }
+
+      //   const obj = {};
+      //   obj[Symbol.iterator] = arr[Symbol.iterator].bind(arr);
+
+      //   for (let v of obj) {
+      //     console.log(v);
+      //   }
+
+      let es6 = {
+        edition: 6,
+        committee: "tsdfs",
+        standard: "sfsdfds",
+      };
+
+      for (var key of Object.keys(someObject)) {
+        console.log(key + ": " + someObject[key]);
       }
     </script>
   </body>

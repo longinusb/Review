@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      //   function* hwGenerator() {
+      //     yield "hello";
+      //     yield "world";
+      //     return "ending";
+      //   }
+      //   var hw = hwGenerator();
+
+      //   var arr = [1, [[2, 3], 4], [5, 6]];
+      //   var flat = function* (a) {
+      //     var length = a.length;
+      //     for (var i = 0; i < length; i++) {
+      //       var item = a[i];
+      //       if (typeof item !== "number") {
+      //         yield* flat(item);
+      //       } else {
+      //         yield item;
+      //       }
+      //     }
+      //   };
+
+      //   for (var f of flat(arr)) {
+      //     console.log(f);
+      //   }
+
+      //   let obj = {
+      //     *[Symbol.iterator]() {
+      //       yield "hello";
+      //       yield "world";
+      //     },
+      //   };
+      //   for (let x of obj) {
+      //     console.log(x);
+      //   }
+
+      //   function* f() {
+      //     for (var i = 0; true; i++) {
+      //       var reset = yield i;
+      //       if (reset) {
+      //         i = -1;
+      //       }
+      //     }
+      //     var g = f();
+      //     g.next();
+      //     g.next();
+      //     g.next(true);
+      //   }
+
+      //next带参数
+      //   function* foo(x) {
+      //     var y = 2 * (yield x + 1);
+      //     var z = yield y / 3;
+      //     return x + y + z;
+      //   }
+      //   var a = foo(5);
+      //   a.next();
+      //   a.next(12);
+      //   a.next(13);
+
+      //向Generator函数内部输入值
+      //   function* dataConsumer() {
+      //     console.log("started");
+      //     console.log(`1. ${yield}`);
+      //     console.log(`2. ${yield}`);
+      //     return "result";
+      //   }
+
+      //   let genObj = dataConsumer();
+      //   genObj.next();
+      //   genObj.next("a");
+      //   genObj.next("b");
+
+      //第一次调用next就能输入值
+      //   function wrapper(generatorFunction) {
+      //     return function (...args) {
+      //       let generatorObject = generatorFunction(...args);
+      //       generatorObject.next();
+      //       return generatorObject;
+      //     };
+      //   }
+
+      //   const wrapped = wrapper(function* () {
+      //     console.log(`First input: ${yield}`);
+      //     return "DONE";
+      //   });
+
+      //   wrapped().next("hello!");
+
+      //斐波那次
+      //   function* fibonacci() {
+      //     let [prev, curr] = [0, 1];
+      //     for (;;) {
+      //       yield curr;
+      //       [perv, curr] = [curr, perv + curr];
+      //     }
+      //   }
+
+      //   for (let n of fibonacci()) {
+      //     if (n > 1000) break;
+      //     console.log(n);
+      //   }
+
+      //为原生对象加上Generator接口
+      //   function* objEntries(obj) {
+      //     let propKeys = Reflect.ownKeys(obj);
+
+      //     for (let propKey of propKeys) {
+      //       yield [propKey, obj[propKey]];
+      //     }
+      //   }
+      //   let jane = { first: "Jane", last: "Doe" };
+      //   for (let [key, value] of objEntries[jane]) {
+      //     console.log(`${key}: ${value}`);
+      //   }
+    </script>
+  </body>
+</html>

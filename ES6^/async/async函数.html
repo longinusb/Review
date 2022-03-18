@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      //获取股票报价的函数
+      //   async function getStockPriceByName(name) {
+      //     const symbol = await getStockSymbol(name);
+      //     const stockPrice = await getStockPrice(symbol);
+      //     return stockPrice;
+      //   }
+      //   getStockPriceByName("goog").then(function (result) {
+      //     console.log(result);
+      //   });
+
+      //指定多少毫秒后输出一个值
+      function timeout(ms) {
+        return new Promise((resolve) => {
+          setTimeout(resolve, ms);
+        });
+      }
+
+      async function asyncPrint(value, ms) {
+        await timeout(ms);
+        console.log(value);
+      }
+      asyncPrint("hello world", 50);
+    </script>
+  </body>
+</html>
