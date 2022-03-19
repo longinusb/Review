@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      //类的内部所有定义的方法，都是不可枚举的
+      //与 ES5 一样，实例的属性除非显式定义在其本身（即定义在this对象上），否则都是定义在原型上（即定义在class上）
+      //生产环境中，我们可以使用 Object.getPrototypeOf 方法来获取实例对象的原型，然后再来为原型添加方法/属性
+      //getter,setter
+      //   class CustomHTMLElement {
+      //     constructor(element) {
+      //       this.element = Element;
+      //     }
+
+      //     get html() {
+      //       return this.element.innerHTML;
+      //     }
+
+      //     set html(value) {
+      //       this.element.innerHTML = value;
+      //     }
+      //   }
+
+      //   var descriptor = Object.getOwnPropertyDescriptor(
+      //     CustomHTMLElement.prototype,
+      //     "html"
+      //   );
+
+      //   console.log("get" in descriptor);
+      //   console.log("set" in descriptor);
+
+      //立即执行的class
+      //   let person = new (class {
+      //     constructor(name) {
+      //       this.name = name;
+      //     }
+      //     sayName() {
+      //       console.log(this.name);
+      //     }
+      //   })("sb");
+
+      //   person.sayName();
+
+      //this解决
+      //   class Logger {
+      //     constructor() {
+      //       this.printName = this.printName.bind(this);
+      //     }
+      //   }
+
+      //   class Obj {
+      //     constructor() {
+      //       this.getThis = () => this;
+      //     }
+      //   }
+
+      //   const myObj = new Obj();
+      //   myObj.getThis() === myObj;
+
+      //静态方法；可以与非静态方法重名
+      //   class Foo {
+      //     static classMethod() {
+      //       console.log("hello");
+      //     }
+
+      //     classMethod() {
+      //       console.log("hello");
+      //     }
+      //   }
+
+      //   Foo.classMethod();
+      //   var foo = new Foo();
+      //   foo.classMethod();
+
+      //私有方法1
+      //   class Widget {
+      //     foo(baz) {
+      //       bar.call(this, baz);
+      //     }
+      //   }
+      //   function bar(baz) {
+      //     return (this.snaf = baz);
+      //   }
+
+      //私有方法2
+      //   const bar = Symbol("bar");
+      //   const snaf = Symbol("snaf");
+
+      //   export default class myclass {
+      //公有方法
+      // foo(baz) {
+      //   this[bar](baz);
+      // }
+
+      //私有方法
+      //     [bar](baz) {
+      //       return (this[snaf] = baz);
+      //     }
+      //   }
+
+      //   class FakeMath {
+      //     static PI = 22 / 7;
+      //     static #totallyRandonNumber = 4;
+
+      //     static #computeRandomNumber() {
+      //       return FakeMath.#totallyRandonNumber;
+      //     }
+
+      //     static random() {
+      //       console.log("i heard you like random bumbers");
+      //       return FakeMath.#computeRandomNumber();
+      //     }
+      //   }
+      //   FakeMath.PI;
+      //   FakeMath.random();
+      //   FakeMath.#totallyRandomNumber;
+      //   FakeMath.#computeRandomNumber();
+
+      //判断私有属性
+      //   class A {
+      //     use(obj) {
+      //       if (#foo in obj) {
+      //         //私有属性存在
+      //       } else {
+      //         //私有属性不存在
+      //       }
+      //     }
+      //   }
+
+      //配合this
+      //   class A {
+      //     #foo = 0;
+      //     m() {
+      //       console.log(#foo in this);
+      //       console.log(#bar in this);
+      //     }
+      //   }
+
+      //in只能在定义该私有属性的类的内部
+      //   class A {
+      //     #foo = 0;
+      //     static test(obj) {
+      //       console.log(#foo in obj);
+      //     }
+      //   }
+      //   A.test(new A());
+      //   A.test({});
+
+      //   class B {
+      //     #foo = 0;
+      //   }
+
+      //   A.test(new B());
+
+      //子类从父类继承的私有属性，也可以使用in运算符来判断
+      class A {
+        #foo = 0;
+        static test(obj) {
+          console.log(#foo in obj);
+        }
+      }
+      class SubA extends A {}
+      A.test(new SubA());
+
+      //in运算符对于Object.create()、Object.setPrototypeOf形成的继承，是无效的。
+      //因为这种继承不会传递私有属性
+    </script>
+  </body>
+</html>
