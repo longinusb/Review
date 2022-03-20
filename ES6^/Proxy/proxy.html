@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      //重定义get和set
+      //   var obj = new Proxy(
+      //     {},
+      //     {
+      //       get: function (target, propKey, receiver) {
+      //         console.log(`gettin ${propKey}!`);
+      //         return Reflect.get(target, propKey, receiver);
+      //       },
+      //       set: function (target, propKey, value, recevier) {
+      //         console.log(`setting ${propKey}!`);
+      //         return Reflect.set(target, propKey, value, recevier);
+      //       },
+      //     }
+      //   );
+      //   obj.count = 1;
+      //   console.log(obj.count);
+
+      //一个技巧是将 Proxy 对象，设置到object.proxy属性，从而可以在object对象上调用
+      //   var obj = { proxy: new Proxy(target, handler) };
+
+      //Proxy 实例也可以作为其他对象的原型对象
+      //   var proxy = new Proxy(
+      //     {},
+      //     {
+      //       get: function (target, propKey) {
+      //         return 35;
+      //       },
+      //     }
+      //   );
+      //   let obj = Object.create(proxy);
+      //   obj.time;
+
+      //同一个拦截器函数，可以设置拦截多个操作
+      var handler = {
+        get: function (target, name) {
+          if (name === "prototype") {
+            return Object.prototype;
+          }
+          return "hello, " + name;
+        },
+
+        apply: function (targer, thisBinding, args) {
+          return args[0];
+        },
+
+        construct: function (target, args) {
+          return { value: args[1] };
+        },
+      };
+
+      var fproxy = new Proxy(function (x, y) {
+        return x + y;
+      }, handler);
+
+      fproxy(1, 2);
+      new fproxy(1, 2);
+      fproxy.prototype === Object.prototype;
+      fproxy.foo === "hello, foo";
+    </script>
+  </body>
+</html>
