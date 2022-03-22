@@ -6,6 +6,18 @@
     <title>Document</title>
   </head>
   <body>
-    <script></script>
+    <script>
+      //将类似数组的对象转为真正的数组
+      let arrayLike = {
+        0: "a",
+        1: "b",
+        2: "c",
+        length: 3,
+      };
+      //ES5
+      var arr1 = [].slice.call(arrayLike);
+      //ES6
+      var arr2 = Array.from(arrayLike);
+    </script>
   </body>
 </html>
