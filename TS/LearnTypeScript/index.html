@@ -1,0 +1,58 @@
+<!-- 
+1.目录结构 index.html+build>webpack.config.js+src>main.ts
+2.使用npm管理项目的依赖，初始化package.json：npm init -y
+3.本地依赖TypeScript：npm install typescript 
+4.初始化tsconfig.json：tsc --init 
+5.配置tslint：npm install tslint -g 
+初始化tslint.json：tslint -i
+
+配置webpack
+1.安装webpack相关依赖：npm install webpack webpack-cli webpack-dev-server -D
+2.在package.json中添加启动命令
+ "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "serve": "cross-env NODE_ENV=development webpack-dev-server --mode=development --config build/webpack.config.js"
+}, 
+3.添加webpack的其他相关依赖
+一：cross-env
+npm install cross-env -D
+二：ts-loader
+npm install ts-loader -D
+三：html-webpack-plugin
+npm install html-webpack-plugin -D
+4.配置webpack.config.js文件
+const HtmlWebpackPlugin = require("html-webpack-plugin");
+
+module.exports = {
+  entry: "./src/main.ts",
+  output: {
+    filename: "build.js"
+  },
+  resolve: {
+    extensions: [".tsx", ".ts", ".js"]
+  },
+  module: {
+    rules: [
+      {
+        test: /\.tsx?$/,
+        use: "ts-loader",
+        exclude: /node_modules/
+      }
+    ]
+  },
+  devtool: process.env.NODE_ENV === "production" ? false : "inline-source-map",
+  devServer: {
+    contentBase: "./dist",
+    stats: "errors-only",
+    compress: false,
+    host: "localhost",
+    port: 8080
+  },
+  plugins: [
+    new HtmlWebpackPlugin({
+      template: "./index.html"
+    })
+  ]
+};
+
+-->
