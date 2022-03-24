@@ -186,25 +186,55 @@
 // }
 
 //接口的继承
-interface Barkable {
-  barking(): void;
-}
-interface Shakable {
-  shaking(): void;
-}
-interface Petable extends Barkable, Shakable {
-  eating(): void;
-}
+// interface Barkable {
+//   barking(): void;
+// }
+// interface Shakable {
+//   shaking(): void;
+// }
+// interface Petable extends Barkable, Shakable {
+//   eating(): void;
+// }
 
-class Dog implements Petable {
-    console.log("wangwang");
-  }
-  shaking(): void {
-    console.log("摇尾巴");
-  }
-  eating(): void {
-    console.log("吃屎");
-  }
+// class Dog implements Petable {
+//     console.log("wangwang");
+//   }
+//   shaking(): void {
+//     console.log("摇尾巴");
+//   }
+//   eating(): void {
+//     console.log("吃屎");
+//   }
+// }
+
+// function identity(arg: number): number {
+//   return arg;
+// }
+
+//参数类型与返回值类型相同，跟踪函数里使用的类型的信息
+// function identity<T>(arg: T): T {
+//   return arg;
+// }
+// let output1 = identity<string>("mystring1");
+// let output2 = identity("mystring2");
+
+// function loggingIdentity<T>(arg: T[]): T[] {
+//   console.log(arg.length);
+//   return arg;
+// }
+// function loggingIdentity2<T>(arg: Array<T>): Array<T> {
+//   console.log(arg.length);
+//   return arg;
+// }
+
+// let myIdentity: <T>(arg: T) => T = identity;
+
+interface GenericIdentityFn<T> {
+  <T>(arg: T): T;
 }
+function identity<T>(arg: T): T {
+  return arg;
+}
+let myIdentity1: GenericIdentityFn<number> = identity;
 //声明为模块，有自已的作用域
 export {};
