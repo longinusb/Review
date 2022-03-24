@@ -197,7 +197,6 @@ interface Petable extends Barkable, Shakable {
 }
 
 class Dog implements Petable {
-  barking(): void {
     console.log("wangwang");
   }
   shaking(): void {
