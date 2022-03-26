@@ -229,12 +229,60 @@
 
 // let myIdentity: <T>(arg: T) => T = identity;
 
-interface GenericIdentityFn<T> {
-  <T>(arg: T): T;
+// interface GenericIdentityFn<T> {
+//   <T>(arg: T): T;
+// }
+// function identity<T>(arg: T): T {
+//   return arg;
+// }
+// let myIdentity1: GenericIdentityFn<number> = identity;
+
+//剩余参数
+// function buildName(firstName: string, ...restName: string[]) {
+//   return firstName + " " + restName.join(" ");
+// }
+// let employeeName = buildName("Joseph", "Samuel", "Lucas");
+// console.log(employeeName);
+
+//this指向
+// let deck = {
+//   suits: ["hearts", "spades", "clubs", "diamonds"],
+//   cards: Array(52),
+//   createCardPicker: function () {
+//     return () => {
+//       let pickedCard = Math.floor(Math.random() * 52);
+//       let pickedSuit = Math.floor(pickedCard / 13);
+//       return { suit: this.suits[pickedSuit], card: pickedCard % 13 };
+//     };
+//   },
+// };
+
+// let cardPicker = deck.createCardPicker();
+// let pickedCard = cardPicker();
+// alert("card: " + pickedCard.card + " of " + pickedCard.suit);
+
+//字符串字面量
+// type Easing = "ease-in" | "ease-out" | "ease-in-out";
+// class UIElement {
+//   animate(dx: number, dy: number, easing: Easing) {
+//     if (easing === "ease-in") {
+//     } else if (easing === "ease-out") {
+//     } else if (easing === "ease-in-out") {
+//     } else {
+//     }
+//   }
+// }
+
+// let button = new UIElement();
+// button.animate(0, 0, "ease-in");
+// button.animate(0, 0, "uneasy");
+
+//在泛型约束中使用类型参数
+function getProperty<T, K extends keyof T>(obj: T, key: K) {
+  return obj[key];
 }
-function identity<T>(arg: T): T {
-  return arg;
-}
-let myIdentity1: GenericIdentityFn<number> = identity;
+let x = { a: 1, b: 2, c: 3, d: 4 };
+getProperty(x, "a");
+getProperty(x, "m");
 //声明为模块，有自已的作用域
 export {};

@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      //super表示父类的构造函数，用来新建一个父类的实例对象
+      //ES6的继承必须先调用super()方法，因为这一步会生成一个继承父类的this对象
+      //注意，这意味着新建子类实例时，父类的构造函数必定会先运行一次
+      //在子类的构造函数中，只有调用super()之后，才可以使用this关键字，否则会报错
+      class Point {}
+
+      class ColorPoint extends Point {
+        constructor(x, y, color) {
+          super(x, y);
+          this.color = color;
+        }
+
+        toString() {
+          return this.color + " " + super.toString();
+        }
+      }
+    </script>
+  </body>
+</html>
