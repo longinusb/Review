@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <input class="search" type="text" />
+    <script>
+      //   function throttle(fn, interval) {
+      //     var last = 0;
+      //     return function () {
+      //       var _this = this;
+      //       var _arguments = arguments;
+
+      //       var now = new Date().getTime();
+      //       if (now - last > interval) {
+      //         fn.apply(_this, _arguments);
+      //         last = now;
+      //       }
+      //     };
+      //   }
+
+      function throttle(fn, interval, option) {
+        var last = 0;
+        var timer = null;
+        if (!option) option = {};
+
+        var trailing = option.trailing || false;
+        var handleFn = function () {
+          var _this = this;
+          var _arguments = arguments;
+
+          var now = new Date().getTime();
+          //   var interval1 = interval + last - now;
+          if (now - last > interval) {
+            if (timer) {
+              clearTimeout(timer);
+              timer = null;
+            }
+            fn.apply(_this, _arguments);
+            last = now;
+          } else if (timer === null && trailing) {
+            timer = setTimeout(function () {
+              timer = null;
+              fn.apply(_this, _arguments);
+            }, interval);
+          }
+        };
+
+        handleFn.cancel = function () {
+          clearTimeout(timer);
+          timer = null;
+        };
+        return handleFn;
+      }
+      var search = document.querySelector(".search");
+      var counter = 0;
+      function searchChange(e) {
+        counter++;
+        console.log("发送" + counter + "网络请求");
+        // console.log(_arguments);
+        // console.log(this);
+        // console.log(e.target.value);
+      }
+
+      var _searchChange = throttle(searchChange, 5000);
+      search.oninput = _searchChange;
+    </script>
+  </body>
+</html>
