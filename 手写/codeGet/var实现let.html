@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      //版本一
+      //   var a = [];
+      //   for (var i = 0; i < 3; i++) {
+      //     (function () {
+      //       var b = i;
+      //       a[i] = function () {
+      //         // 注意不能直接输出i，不然依旧一样
+      //         console.log("i为：" + i);
+      //         console.log("b为:" + b);
+      //       };
+      //     })(i);
+      //   }
+      //   a[1](); // i为3，b为0
+
+      //版本二
+      for (var i = 0; i < 4; i++) {
+        // 利用函数作用域
+        (function f(a) {
+          //   setTimeout(function () {
+          //     console.log(a);
+          //   }, 0);
+          console.log(a);
+        })(i);
+      }
+    </script>
+  </body>
+</html>
