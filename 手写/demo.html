@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      function sendAjax() {
+        var formData = new FormData();
+        formData.append("username", "johndoe");
+        formData.append("id", 12345);
+
+        var xhr = new XMLHttpRequest();
+        xhr.timeout = 3000;
+        xhr.responseType = "text";
+        xhr.open("POST", "/server", true);
+        xhr.onload = function (e) {
+          if (this.status == 200 || this.status == 304) {
+            alert(this.responseText);
+          }
+        };
+        xhr.ontimeout = function (e) {};
+        xhr.onerror = function (e) {};
+        xhr.upload.onprogress = function (e) {};
+
+        xhr.send(formData);
+      }
+    </script>
+  </body>
+</html>

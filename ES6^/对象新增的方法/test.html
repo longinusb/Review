@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      //(==)：会自动转换数据类型
+      //(===)：NaN不等于自身，+0等于-0
+      //Object.is()
+      //   Object.is("foo", "foo");
+      //   Object.is({}, {});
+
+      //ES5部署
+      //   Object.defineProperty(Object, "is", {
+      //     value: function (x, y) {
+      //       //针对+0不等于-0
+      //       if (x === y) {
+      //         return x !== 0 || 1 / x === 1 / y;
+      //       }
+      //       //针对NaN
+      //       return x !== x && y !== y;
+      //     },
+      //     configurable: true,
+      //     enumerable: false,
+      //     writable: true,
+      //   });
+
+      //   //Object.assign()
+      //   //只拷贝源对象的自身属性（不拷贝继承属性），也不拷贝不可枚举的属性
+      //   const target = { a: 1 };
+      //   const source1 = { b: 2 };
+      //   const source2 = { c: 3 };
+      //   Object(target, source1, source2);
+
+      //   //字符串会以数组形式拷贝入目标对象
+      //   //字符串的包装对象会产生可枚举属性
+      //   const v = "123";
+      //   const obj = Object.assign({}, v);
+      //   console.log(obj);
+
+      //   Object.assign({ a: "b" }, { [Symbol("c")]: "d" });
+
+      //   //浅拷贝、同名属性的替换、数组的处理、取值函数的处理
+      //   //为对象添加属性
+      //   class Point {
+      //     constructor(x, y) {
+      //       Object.assign(this, x, y);
+      //     }
+      //   }
+
+      //   //为对象添加方法
+      //   Object.assign(SomeClass.prototype, {
+      //     someMethod(arg1, arg2) {},
+      //     anotherMethod() {},
+      //   });
+
+      //   //克隆对象
+      //   function clone(origin) {
+      //     return Object.assign({}, origin);
+      //   }
+
+      //   //保持继承链
+      //   function clone(origin) {
+      //     let originProto = Object.getPrototypeOf(origin);
+      //     return Object.assign(Obj.create(originProto), origin);
+      //   }
+
+      //   //合并多个对象
+      //   const merge = (target, ...sources) => Object.assign(target, ...sources);
+
+      //为属性指定默认值
+      //注意浅拷贝
+      //   const DEFAULTS = {
+      //     logLevel: 0,
+      //     outputFormat: "html",
+      //   };
+      //   function processContent(options) {
+      //     options = Object.assign({}, DEFAULTS, options);
+      //     console.log(options);
+      //   }
+
+      //Object.getOwnPropertyDescriptors()返回指定对象所有自身属性（非继承属性）的描述对象
+      //   const obj = {
+      //     foo: 123,
+      //     get bar() {
+      //       return "abc";
+      //     },
+      //   };
+      //   Object.getOwnPropertyDesriptors(obj);
+
+      //   //模拟
+      //   function getOwnPropertyDescriptors(obj) {
+      //     const result = {};
+      //     for (let key of Reflect.ownKeys(obj)) {
+      //       result[key] = Object.getOwnPropertyDescriptor(obj, key);
+      //     }
+      //     return result;
+      //   }
+
+      //该方法的引入目的，主要是为了解决Object.assign()无法正确拷贝get属性和set属性的问题
+      //   const source = {
+      //     set foo(value) {
+      //       console.log(value);
+      //     },
+      //   };
+      //   const target1 = {};
+      //   Object.defineProperties(
+      //     target1,
+      //     Object.getOwnPropertyDescriptors(source)
+      //   );
+      //   Object.getOwnPropertyDescriptor(target1, "foo");
+
+      //另一个用处，是配合Object.create()方法，将对象属性克隆到一个新对象。这属于浅拷贝
+      //   const clone = Object.create(
+      //     Object.getPrototypeOf(obj),
+      //     Object.getOwnPropertyDescriptors(obj)
+      //   );
+
+      //实现一个对象继承另一个对象
+      //   const obj = Object.create(
+      //     prot,
+      //     Object.getOwnPropertyDescriptors({ foo: 123 })
+      //   );
+
+      //   //实现Mixin（混入）
+      //   let mix = (Object) => ({
+      //     with: (...mixins) =>
+      //       mixins.reduce(
+      //         (c, mixin) =>
+      //           Object.create(c, Object.getOwnPropertyDescriptors(mixin)),
+      //         object
+      //       ),
+      //   });
+
+      //   let a = { a: "a" };
+      //   let b = { b: "b" };
+      //   let c = { c: "c" };
+      //   let d = mix(c).with(a, b);
+
+      //   //用来设置一个对象的原型对象（prototype），返回参数对象本身
+      //   const o = Object.setPrototypeOf({}, null);
+      //   //等同于
+      //   function setPrototypeOf(obj, proto) {
+      //     obj.__proto__ = proto;
+      //     return obj;
+      //   }
+
+      //   //用于读取一个对象的原型对象
+      //   Object.getPrototypeOf(obj);
+
+      //   //Object.keys方法，返回一个数组，成员是参数对象自身的（不含继承的）所有可遍历（enumerable）属性的键名
+      //   Object.key(obj);
+
+      //   //Object.values方法返回一个数组，成员是参数对象自身的（不含继承的）所有可遍历（enumerable）属性的键值
+      //   //Object.values只返回对象自身的可遍历属性。
+      //   const obj = Object.create({}, { p: { value: 42 } });
+      //   Object.value(obj);
+
+      //   //把enumerable改成true
+      //   const obj = Object.create(
+      //     {},
+      //     {
+      //       p: {
+      //         value: 42,
+      //         enumerable: true,
+      //       },
+      //     }
+      //   );
+
+      //Object.values会过滤属性名为 Symbol 值的属性
+      //如果Object.values方法的参数是一个字符串，会返回各个字符组成的一个数组
+      //如果参数不是对象，Object.values会先将其转为对象。由于数值和布尔值的包装对象，都不会为实例添加非继承的属性。所以，Object.values会返回空数组。
+
+      //Object.entries()方法返回一个数组，成员是参数对象自身的（不含继承的）所有可遍历（enumerable）属性的键值对数组
+      //如果原对象的属性名是一个 Symbol 值，该属性会被忽略
+
+      //   //遍历对象的属性
+      //   let obj = { one: 1, two: 2 };
+      //   for (let [k, v] of Object.entries(obj)) {
+      //     console.log(`${JSON.stringify(k)}:${JSON.stringify(v)}`);
+      //   }
+
+      //   const obj = { foo: "bar", boo: 42 };
+      //   const map = new Map(Object.entries(obj));
+      //   console.log(map);
+
+      //   //Generator函数的版本
+      //   function* entries(obj) {
+      //     for (let key of Object.keys(obj)) {
+      //       yield [key, obj[key]];
+      //     }
+      //   }
+
+      //   //非Generator函数的版本
+      //   function entries(obj) {
+      //     let arr = [];
+      //     for (let key of Object.keys(obj)) {
+      //       arr.push([key, obj[key]]);
+      //     }
+      //     return arr;
+      //   }
+
+      //Object.fromEntries()方法是Object.entries()的逆操作，用于将一个键值对数组转为对象
+      Object.fromEntries([
+        ["foo", "bar"],
+        ["baz", 42],
+      ]);
+      //该方法的主要目的，是将键值对的数据结构还原为对象，因此特别适合将 Map 结构转为对象
+      const entries = new Map([
+        ["foo", "bar"],
+        ["baz", 42],
+      ]);
+      Object.fromEntries(entries);
+
+      //该方法的一个用处是配合URLSearchParams对象，将查询字符串转为对象
+      Object.fromEntries(new URLSearchParams("foo=bar&baz=qux"));
+    </script>
+  </body>
+</html>
