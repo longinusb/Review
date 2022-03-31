@@ -6,27 +6,81 @@
     <title>Document</title>
   </head>
   <body>
+    <input class="search" type="text" />
+    <button class="cancel-btn">取消</button>
     <script>
-      function sendAjax() {
-        var formData = new FormData();
-        formData.append("username", "johndoe");
-        formData.append("id", 12345);
+      // function sendAjax() {
+      //   var formData = new FormData();
+      //   formData.append("username", "johndoe");
+      //   formData.append("id", 12345);
 
-        var xhr = new XMLHttpRequest();
-        xhr.timeout = 3000;
-        xhr.responseType = "text";
-        xhr.open("POST", "/server", true);
-        xhr.onload = function (e) {
-          if (this.status == 200 || this.status == 304) {
-            alert(this.responseText);
+      //   var xhr = new XMLHttpRequest();
+      //   xhr.timeout = 3000;
+      //   xhr.responseType = "text";
+      //   xhr.open("POST", "/server", true);
+      //   xhr.onload = function (e) {
+      //     if (this.status == 200 || this.status == 304) {
+      //       alert(this.responseText);
+      //     }
+      //   };
+      //   xhr.ontimeout = function (e) {};
+      //   xhr.onerror = function (e) {};
+      //   xhr.upload.onprogress = function (e) {};
+
+      //   xhr.send(formData);
+      // }
+
+      //防抖
+      function searchChange() {
+        counter++;
+        console.log("发送第" + counter + "次请求");
+      }
+      function throttle(fn, interval, option) {
+        let last = 0;
+        let timer = null;
+        if (!option) option = {};
+        let trailing = option.trailing || false;
+
+        let handleFn = function () {
+          let _this = this;
+          let _arguments = arguments;
+          let now = new Date().getTime();
+          if (now - last > interval) {
+            if (timer) {
+              clearTimeout(timer);
+              fn.apply(_this, _arguments);
+            }
+            fn.apply(_this, _arguments);
+            last = now;
+          } else if (timer === null && trailing) {
+            timer = setTimeout(function () {
+              timer = null;
+              fn.apply(_this, _arguments);
+            }, interval);
           }
         };
-        xhr.ontimeout = function (e) {};
-        xhr.onerror = function (e) {};
-        xhr.upload.onprogress = function (e) {};
-
-        xhr.send(formData);
+        handleFn.cancle = function () {
+          if (timer) {
+            clearTimeout(timer);
+            timer = null;
+          }
+        };
+        return handleFn;
       }
+
+      let counter = 0;
+      let cancelBtn = document.querySelector(".cancel-btn");
+      let search = document.querySelector(".search");
+      let _searchChange = debounce(searchChange, 2000, {
+        leading: 1,
+        result: function () {
+          console.log("get");
+        },
+      });
+      search.oninput = _searchChange;
+      cancelBtn.onclick = function (event) {
+        _searchChange.cancel();
+      };
     </script>
   </body>
 </html>
