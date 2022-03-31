@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      //call()方法在使用一个指定的this值和若干个指定的参数值的前提下调用某个函数或方法。
+      // 1.将函数设为对象的属性
+      // 2.执行该函数
+      // 3.删除该函数
+
+      //版本一
+      //   Function.prototype.call2 = function (context) {
+      //     //首先要获取调用call的函数，用this可以获取
+      //     context.fn = this;
+      //     context.fn();
+      //     delete context.fn;
+      //   };
+
+      //版本二
+      //   Function.prototype.call2 = function (context) {
+      //     //首先要获取调用call的函数，用this可以获取
+      //     context.fn = this;
+      //     var args = [];
+      //     for (let i = 1, len = arguments.length; i < len; i++) {
+      //       args.push("arguments[" + i + "]");
+      //     }
+      //     //当一个数组被作为文本值或者进行字符串连接操作时，将会自动调用其 toString 方法。
+      //     eval("context.fn(" + args + ")");
+      //     // context.fn(...args);
+      //     delete context.fn;
+      //   };
+
+      //版本三：返回值和this
+      Function.prototype.call2 = function (context) {
+        context = context || window;
+        context.fn = this;
+
+        var args = [];
+        for (let i = 1, len = arguments.length; i < len; i++) {
+          args.push("arguments[" + i + "]");
+        }
+        //当一个数组被作为文本值或者进行字符串连接操作时，将会自动调用其 toString 方法。
+        let result = eval("context.fn(" + args + ")");
+        // context.fn(...args);
+        delete context.fn;
+        return result;
+      };
+
+      var foo = {
+        value: 1,
+      };
+
+      function bar() {
+        console.log(this.value);
+      }
+
+      bar.call2(undefined);
+    </script>
+  </body>
+</html>
