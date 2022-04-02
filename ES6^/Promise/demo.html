@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      function Promise(executor) {
+        let _this = this;
+        this.state = "pending";
+        this.value = undefined;
+        this.reason = undefined;
+        this.onResolvedCallbacks = [];
+        this.onRejectedCallbacks = [];
+
+        try {
+          executor(resolve, reject);
+        } catch (err) {
+          reject(err);
+        }
+
+        function resolve(value) {
+          if (_this.state === "pending") {
+            _this.value = value;
+            _this.onResolvedCallbacks.forEach((cb) => cb(value));
+            _this.state = "resolved";
+          }
+        }
+        function reject(reason) {
+          if (_this.state === "pending") {
+            _this.reason = reason;
+            _this.onRejectedCallbacks.forEach((cb) => cb(reason));
+            _this.state = "rejected";
+          }
+        }
+      }
+
+      Promise.prototype.then = function (onFulfilled, onRejected) {
+        onFulfilled =
+          typeof onFulfilled === "function" ? onFulfilled : (value) => value;
+        onRejected =
+          typeof onRejected === "function"
+            ? onRejected
+            : (err) => {
+                throw err;
+              };
+        let promise2 = new Promise((resolve, reject) => {
+          if (this.state === "pending") {
+            //   if (typeof onFulfilled === "function") {
+            this.onResolvedCallbacks.push(onFulfilled);
+            //   }
+            //   if (typeof onRejected === "function") {
+            this.onRejectedCallbacks.push(onRejected);
+            //   }
+          }
+
+          if (this.state === "resolved") {
+            //   if (typeof onFuilled === "function") {
+            onFulfilled(this.value);
+            //   }
+          }
+          if (this.state === "rejected") {
+            //   if (typeof onRejected === "function") {
+            onRejected(this.reason);
+            //   }
+          }
+        });
+        return promise2;
+      };
+    </script>
+  </body>
+</html>
