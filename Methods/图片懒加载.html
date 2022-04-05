@@ -1,0 +1,35 @@
+<html>
+  <script>
+    //方案一：位置计算+滚动事件（scrool）+ DataSet API
+    clientTop, offsetTop, clientHeight, scrollTop;
+    window.scroll;
+    // 设置临时Data属性，控制加载时用src代替临时属性
+
+    // 方案二：getBoundingClientRect API + Scroll with Throttle + DataSet API
+    //判断图片出现在当前视口
+    //clientHeight代表当前视口高度
+    img.getBoundingClientRect().top < document.documentElement.clientHeight;
+
+    _.throttle(func, [(wait = 0)], [(options = {})]);
+
+    //方案三：IntersectionObserver API + DataSet API
+    //IntersectionObserver：监听元素是否到了当前视口的事件
+    const observer = new IntersectionObserver((changes) => {
+      // changes: 目标元素集合
+      changes.forEach((change) => {
+        // intersectionRatio
+        if (change.isIntersecting) {
+          //entry.isIntersecting 代表目标元素可见
+          const img = change.target;
+          img.src = img.dataset.src;
+          observer.unobserve(img);
+        }
+      });
+    });
+
+    observer.observe(img);
+
+    //方案四：LazyLoading属性
+    <img src="longinus.jpg" loading="lazy" />;
+  </script>
+</html>

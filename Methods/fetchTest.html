@@ -1,0 +1,61 @@
+<html>
+  <script>
+    //基本用法
+    // fetch(url, {
+    //   method: "POST",
+    //   headers: {
+    //     "Content-Type": "application/json",
+    //   },
+    //   body: JSON.stringify(data),
+    // })
+    //   .then(
+    //     (res) => {
+    //       return res.json();
+    //     },
+    //     (err) => console.log(err)
+    //   )
+    //   .then(
+    //     (data) => {
+    //       console.log(data);
+    //     },
+    //     (err) => console.log(err)
+    //   );
+
+    // //async&await用法
+    // (async function () {
+    //   try {
+    //     let res = await fetch(url, {
+    //       method: "POST",
+    //       headers: {
+    //         "Content-Type": "application/json",
+    //       },
+    //       body: JSON.stringify(data),
+    //     });
+    //     let data = await res.json();
+    //     console.log(data);
+    //   } catch (err) {}
+    // })();
+
+    const controller = new AbortController();
+    const signal = controller.signal;
+
+    const downloadBtn = document.querySelector(".download");
+    const abortBtn = document.querySelector(".abort");
+
+    downloadBtn.addEventListener("click", fetchVideo);
+
+    //点击取消按钮时，取消请求的发送
+    abortBtn.addEventListener("click", function () {
+      controller.abort();
+      console.log("Download aborted");
+    });
+
+    function fetchVideo() {
+      fetch(url, { signal })
+        .then(function (response) {})
+        .catch(function (e) {
+          resports.textContent = "Download error: " + e.message;
+        });
+    }
+  </script>
+</html>
