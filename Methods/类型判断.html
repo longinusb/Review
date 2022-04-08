@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      //js中的===并非对所有引用类型的数据进行判断时都为false，对于那些接近“单例”形式的对象，是可以和自身全等的
+      //toString：可以检测16种（null、undefined、string、object、boolean、array、number、function、symbol、bigint、Error、Date、RegExp、Math、JSON、arguments
+      //   let number = 1,
+      //     string = "123",
+      //     und = Symbol();
+      //   console.log(Object.prototype.toString.call(und));
+      //   function a() {
+      //     console.log(Object.prototype.toString.call(arguments)); // [object Arguments]
+      //   }
+      //   a();
+
+      // 第一版
+      //   var class2type = {};
+
+      //   // 生成class2type映射
+      //   "Boolean Number String Function Array Date RegExp Object Error Null Undefined"
+      //     .split(" ")
+      //     .map(function (item, index) {
+      //       class2type["[object " + item + "]"] = item.toLowerCase();
+      //     });
+
+      //   function type(obj) {
+      //ES6 新增的 Symbol、Map、Set 等类型，它们并不在 class2type 列表中
+      //     return typeof obj === "object" || typeof obj === "function"
+      //       ? class2type[Object.prototype.toString.call(obj)] || "object"
+      //       : typeof obj;
+      //   }
+
+      // 第二版：解决IE6的null和undefined兼容问题
+      //   var class2type = {};
+
+      //   // 生成class2type映射
+      //   "Boolean Number String Function Array Date RegExp Object Error"
+      //     .split(" ")
+      //     .map(function (item, index) {
+      //       class2type["[object " + item + "]"] = item.toLowerCase();
+      //     });
+
+      //   function type(obj) {
+      //     // 一箭双雕
+      //     if (obj == null) {
+      //       return obj + "";
+      //     }
+      //     return typeof obj === "object" || typeof obj === "function"
+      //       ? class2type[Object.prototype.toString.call(obj)] || "object"
+      //       : typeof obj;
+      //   }
+    </script>
+  </body>
+</html>
