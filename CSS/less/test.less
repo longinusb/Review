@@ -1,0 +1,87 @@
+@width: 10px;
+@height: @width + 10px;
+
+.header {
+  width: @width;
+  height: @height;
+}
+
+.component {
+  width: 300px;
+  @media (min-width: 768px) {
+    width: 600px;
+    @media (min-resolution: 192dpi) {
+      background-image: url(/img/retina2x.png);
+    }
+  }
+  @media (min-width: 1280px) {
+    width: 800px;
+  }
+
+  div {
+    font-size: 14px;
+    p {
+      margin: 0 auto;
+      a {
+        color: red;
+      }
+    }
+  }
+
+  .bgcolor {
+    background: #fff;
+    a {
+      color: #888888;
+      &:hover {
+        color: #ff6600;
+      }
+    }
+  }
+
+  .mixin(@color, @padding: xxx, @margin:2) {
+    color-3: color;
+    paddding-3: @padding;
+    margin: @margin;
+  }
+
+  #bgcolor() {
+    background: #fff;
+    .a() {
+      color: #888;
+      &:hover {
+        color: #ff6600;
+      }
+      .b() {
+        background: #ff0000;
+      }
+    }
+  }
+
+  .bgcolor1 {
+    background: #fdfee0;
+    #bgcolor .a;
+  }
+  .bgcolor2 {
+    #bgcolor .a .b;
+  }
+
+  .mixin(@a) when(ispixel(@a)) {
+    width: @a;
+  }
+
+  .mixin(@a) when(ispercentage(@a)) {
+    width: @a;
+  }
+
+  .loop(@counter) when(@counter>0){
+      .h@{counter}{
+          padding: (10px*@counter);
+      }
+      .loop((@counter -1))
+  }
+
+  .mixin(){
+      background+_: #f66;
+      background+_: url('/sss.jpg');
+  }
+}
