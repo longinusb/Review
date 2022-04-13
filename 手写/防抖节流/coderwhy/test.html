@@ -14,39 +14,51 @@
         console.log("发送" + counter + "次请求");
       }
       //promise
-      // function debounce(fn, delay, leading) {
+      // function debounce(fn, delay, option) {
       //   let timer = null;
-      //   leading = leading || false;
-      //   let handleFn = () => {
-      //     return new Promise((resolve, reject) => {
+      //   if (!option) option = {};
+      //   option.leading = leading || false;
+      //   option.result = result || null;
+
+      //   let handelFn = function () {
+      //     return () => {
       //       if (timer) clearTimeout(timer);
       //       let _this = this;
       //       let _arguments = arguments;
 
       //       if (leading) {
       //         let isInvoke = false;
+
       //         if (!timer) {
-      //           resolve(fn.apply(_this, _arguments));
+      //           callFn(_this, _arguments);
       //           isInvoke = true;
       //         }
       //         timer = setTimeout(() => {
       //           timer = null;
       //           if (!isInvoke) {
-      //             resolve(fn.apply(_this, _arguments));
+      //             callFn(_this, _arguments);
       //           }
-      //         }, delay);
+      //         });
       //       } else {
       //         timer = setTimeout(() => {
-      //           resolve(fn.apply(_this, _arguments));
+      //           callFn(_this, _arguments);
       //         }, delay);
       //       }
-      //     });
+      //     };
       //   };
 
-      //   handleFn.cancel = function () {
+      //   function callFn(context, argument) {
+      //     let res = fn.apply(context, argument);
+      //     if (result) {
+      //       result(res);
+      //     }
+      //   }
+
+      //   handelFn.cancel = function () {
       //     if (timer) clearTimeout(timer);
       //   };
-      //   return handleFn;
+
+      //   return handelFn;
       // }
 
       //回调函数
@@ -94,46 +106,32 @@
       // }
 
       // //时间戳
-      // function throttle(fn, interval, option) {
-      //   let last = 0;
-      //   let timer = null;
-      //   if (!option) option = {};
-      //   let trailing = option.trailing || false;
-      //   let result = option.result || false;
+      function throttle(fn, interval, option) {
+        let last = 0;
+        let timer = null;
+        if (!option) option = {};
+        let trailing = option.trailing || false;
 
-      //   let handleFn = function () {
-      //     let _this = this;
-      //     let _arguments = arguments;
-      //     let now = new Date().getTime();
-      //     return new Promise((resolve, reject) => {
-      //       if (now - last > interval) {
-      //         if (timer) {
-      //           clearTimeout(timer);
-      //           timer = null;
-      //         }
-      //         resolve(callFn(_this, _arguments));
-      //         last = now;
-      //       } else if (timer === null && trailing) {
-      //         timer = setTimeout(function () {
-      //           timer = null;
-      //           resolve(callFn(_this, _arguments));
-      //         }, interval);
-      //       }
-      //     });
-      //   };
+        return function () {
+          let _this = this;
+          let _arguments = arguments;
+          let now = new Date().getTime();
 
-      //   function callFn(context, argument) {
-      //     let res = fn.apply(context, argument);
-      //     if (result) {
-      //       result(res);
-      //     }
-      //   }
-      //   handleFn.cancel = function () {
-      //     if (timer) clearTimeout(timer);
-      //     timer = null;
-      //   };
-      //   return handleFn;
-      // }
+          if (now - last > interval) {
+            if (timer) {
+              clearTimeout(timer);
+              timer = null;
+            }
+            fn.apply(_this, _arguments);
+            last = now;
+          } else if (timer === null && trailing) {
+            timer = setTimeout(() => {
+              timer = null;
+              fn.apply(_this, _arguments);
+            }, interval);
+          }
+        };
+      }
 
       // let search = document.querySelector(".search");
       // let counter = 0;
