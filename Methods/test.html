@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      class Emitter {
+        constructor() {
+          this._listener = [];
+        }
+
+        on(type, fn) {
+          this._listener[type]
+            ? this._listener[type].push(fn)
+            : (this._listener[type] = [fn]);
+        }
+
+        trigger(type, ...rest) {
+          if (!this._listener[type]) return;
+          this._listener[type].forEach((callback) => callback(...rest));
+        }
+      }
+    </script>
+  </body>
+</html>
