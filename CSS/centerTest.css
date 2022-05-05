@@ -1,0 +1,58 @@
+.parent {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  width: 200px;
+  height: 200px;
+  background-color: black;
+  left: 50%;
+  transform: translate(-50%, 0);
+}
+.son1 {
+  /* position: absolute; */
+  /* flex-shrink: 0; */
+  flex-basis: 100px;
+  width: 100px;
+  height: 100px;
+  background-color: brown;
+  /* left: 50%;
+  transform: translate(-50%, 0); */
+}
+.son2 {
+  /* flex-grow: 1; */
+  width: 300px;
+  height: 100px;
+  background-color: chartreuse;
+}
+.triangle {
+  width: 0px;
+  height: 0px;
+  border: 50px solid;
+  border-color: transparent rgba(134, 241, 143, 1) transparent transparent;
+  transform-origin: top right;
+  transform: rotate(-45deg);
+}
+.container {
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-left: 100px solid #f00;
+}
+tr:nth-child(2n) {
+  background-color: tomato;
+}
+tr:nth-child(2n + 1) {
+  background-color: turquoise;
+}
+table {
+  border-collapse: collapse;
+  border: 2px solid rgb(200, 200, 200);
+  letter-spacing: 1px;
+  font-family: sans-serif;
+  font-size: 0.8rem;
+}
+td {
+  border: 1px solid rgb(190, 190, 190);
+  padding: 10px;
+}

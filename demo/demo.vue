@@ -1,3 +1,12 @@
+<template>
+  <div></div>
+</template>
+
+<script>
+export default {};
+</script>
+
+<style scoped>
 body {
   margin: 0;
   padding: 0;
@@ -83,7 +92,7 @@ body {
 .content {
   /* flex: 1 1 auto; */
   position: relative;
-  overflow: hidden;
+  overflow: scroll;
   height: 590px;
   background-color: #f5f5f5;
 }
@@ -106,9 +115,12 @@ body {
   flex: 1;
 }
 .footer ul li i {
+  font-weight: 400;
+  font-style: normal;
   font-size: small;
 }
 .footer ul li svg {
   display: block;
   margin-top: 10px;
 }
+</style>

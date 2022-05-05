@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      @media (min-width: 768px) {
+        .container {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+      }
+
+      @media (min-width: 1024px) {
+        .container {
+          grid-template-columns: repeat(3, minmax(0, 1fr));
+        }
+      }
+
+      .container {
+        display: grid;
+        /* grid-template-columns: repeat(1, 1fr); */
+      }
+
+      .container {
+        background-color: #eee;
+        gap: 1rem;
+      }
+
+      .item {
+        background-color: #aaa;
+        height: 300px;
+        border: 1px solid #888;
+      }
+    </style>
+  </head>
+  <body>
+    <link rel="stylesheet" href="./centerTest.css" />
+    <div class="container">
+      <div class="item"></div>
+      <div class="item"></div>
+      <div class="item"></div>
+      <div class="item"></div>
+      <div class="item"></div>
+      <div class="item"></div>
+    </div>
+
+    <!-- <div>
+      <div class="parent">
+        <div class="son1"></div>
+        <div class="son2"></div>
+      </div>
+      <div class="triangle"></div>
+
+      <table>
+        <tr>
+          <td>123</td>
+          <td>123</td>
+          <td>123</td>
+        </tr>
+        <tr>
+          <td>123</td>
+          <td>123</td>
+          <td>123</td>
+        </tr>
+        <tr>
+          <td>123</td>
+          <td>123</td>
+          <td>123</td>
+        </tr>
+        <tr>
+          <td>123</td>
+          <td>123</td>
+          <td>123</td>
+        </tr>
+        <tr>
+          <td>123</td>
+          <td>123</td>
+          <td>123</td>
+        </tr>
+      </table>
+    </div> -->
+    <!-- <script>
+      // 栈类
+      // function Stack() {
+      //   // 栈中的属性
+      //   var items = [];
+
+      //   // 栈相关的方法
+      //   // 压栈操作
+      //   this.push = function (element) {
+      //     items.push(element);
+      //   };
+
+      //   // 出栈操作
+      //   this.pop = function () {
+      //     return items.pop();
+      //   };
+
+      //   // peek操作
+      //   this.peek = function () {
+      //     return items[items.length - 1];
+      //   };
+
+      //   // 判断栈中的元素是否为空
+      //   this.isEmpty = function () {
+      //     return items.length == 0;
+      //   };
+
+      //   // 获取栈中元素的个数
+      //   this.size = function () {
+      //     return items.length;
+      //   };
+      // }
+
+      // // 封装十进制转二进制的函数
+      // function dec2bin(decNumer) {
+      //   // 定义变量
+      //   var stack = new Stack();
+      //   var remainder;
+
+      //   // 循环除法
+      //   while (decNumer > 0) {
+      //     remainder = decNumer % 2;
+      //     decNumer = Math.floor(decNumer / 2);
+      //     stack.push(remainder);
+      //   }
+
+      //   // 将数据取出
+      //   var binayriStrng = "";
+      //   while (!stack.isEmpty()) {
+      //     binayriStrng += stack.pop();
+      //   }
+      //   return binayriStrng;
+      // }
+      // console.log(dec2bin(10));
+
+      //优先队列
+      // function PriorityQueue() {
+      //   var items = [];
+      //   function QueueElement(element, priority) {
+      //     this.element = element;
+      //     this.priority = priority;
+      //   }
+      //   this.enqueue = function (element, priority) {
+      //     var queueElement = new QueueElement(element, priority);
+
+      //     if (this.isEmpty()) {
+      //       items.push(queueElement);
+      //     } else {
+      //       var added = false;
+      //       for (var i = 0; i < items.length; i++) {
+      //         if (queueElement.priority < items[i].priority) {
+      //           items.splice(i, 0, queueElement);
+      //           added = true;
+      //           break;
+      //         }
+      //       }
+      //       if (!added) {
+      //         items.push(queueElement);
+      //       }
+      //     }
+      //   };
+      // }
+
+      // function passGame(nameList, num) {
+      //   var queue = new Queue();
+      //   for (var i = 0; i < nameList.length; i++) {
+      //     queue.enqueue(nameList[i]);
+      //   }
+
+      //   while (queue.size() > 1) {
+      //     for (var i = 0; i < num; i++) {
+      //       queue.enqueue(queue.dequeue());
+      //     }
+
+      //     queue.dequeue();
+      //   }
+      // }
+
+      // 创建双向链表的构造函数
+      function DoublyLinkedList() {
+        // 创建节点构造函数
+        function Node(element) {
+          this.element = element;
+          this.next = null;
+          this.prev = null; // 新添加的
+        }
+
+        // 定义属性
+        this.length = 0;
+        this.head = null;
+        this.tail = null; // 新添加的
+
+        // 定义相关操作方法
+        // 在尾部追加数据
+        DoublyLinkedList.prototype.append = function (element) {
+          // 1.根据元素创建节点
+          var newNode = new Node(element);
+
+          // 2.判断列表是否为空列表
+          if (this.head == null) {
+            this.head = newNode;
+            this.tail = newNode;
+          } else {
+            this.tail.next = newNode;
+            newNode.prev = this.tail;
+            this.tail = newNode;
+          }
+
+          // 3.length+1
+          this.length++;
+        };
+
+        // 在任意位置插入数据
+        DoublyLinkedList.prototype.insert = function (position, element) {
+          // 1.判断越界的问题
+          if (position < 0 || position > this.length) return false;
+
+          // 2.创建新的节点
+          var newNode = new Node(element);
+
+          // 3.判断插入的位置
+          if (position === 0) {
+            // 在第一个位置插入数据
+            // 判断链表是否为空
+            if (this.head == null) {
+              this.head = newNode;
+              this.tail = newNode;
+            } else {
+              this.head.prev = newNode;
+              newNode.next = this.head;
+              this.head = newNode;
+            }
+          } else if (position === this.length) {
+            // 插入到最后的情况
+            // 思考: 这种情况是否需要判断链表为空的情况呢? 答案是不需要, 为什么?
+            this.tail.next = newNode;
+            newNode.prev = this.tail;
+            this.tail = newNode;
+          } else {
+            // 在中间位置插入数据
+            // 定义属性
+            var index = 0;
+            var current = this.head;
+            var previous = null;
+
+            // 查找正确的位置
+            while (index++ < position) {
+              previous = current;
+              current = current.next;
+            }
+
+            // 交换节点的指向顺序
+            newNode.next = current;
+            newNode.prev = previous;
+            current.prev = newNode;
+            previous.next = newNode;
+          }
+
+          // 4.length+1
+          this.length++;
+
+          return true;
+        };
+
+        // 根据位置删除对应的元素
+        DoublyLinkedList.prototype.removeAt = function (position) {
+          // 1.判断越界的问题
+          if (position < 0 || position >= this.length) return null;
+
+          // 2.判断移除的位置
+          var current = this.head;
+          if (position === 0) {
+            if (this.length == 1) {
+              this.head = null;
+              this.tail = null;
+            } else {
+              this.head = this.head.next;
+              this.head.prev = null;
+            }
+          } else if (position === this.length - 1) {
+            current = this.tail;
+            this.tail = this.tail.prev;
+            this.tail.next = null;
+          } else {
+            var index = 0;
+            var previous = null;
+
+            while (index++ < position) {
+              previous = current;
+              current = current.next;
+            }
+
+            previous.next = current.next;
+            current.next.prev = previous;
+          }
+
+          // 3.length-1
+          this.length--;
+
+          return current.element;
+        };
+
+        // 根据元素获取在链表中的位置
+        DoublyLinkedList.prototype.indexOf = function (element) {
+          // 1.定义变量保存信息
+          var current = this.head;
+          var index = 0;
+
+          // 2.查找正确的信息
+          while (current) {
+            if (current.element === element) {
+              return index;
+            }
+            index++;
+            current = current.next;
+          }
+
+          // 3.来到这个位置, 说明没有找到, 则返回-1
+          return -1;
+        };
+
+        // 根据元素删除
+        DoublyLinkedList.prototype.remove = function (element) {
+          var index = this.indexOf(element);
+          return this.removeAt(index);
+        };
+
+        // 判断是否为空
+        DoublyLinkedList.prototype.isEmpty = function () {
+          return this.length === 0;
+        };
+
+        // 获取链表长度
+        DoublyLinkedList.prototype.size = function () {
+          return this.length;
+        };
+
+        // 获取第一个元素
+        DoublyLinkedList.prototype.getHead = function () {
+          return this.head.element;
+        };
+
+        // 获取最后一个元素
+        DoublyLinkedList.prototype.getTail = function () {
+          return this.tail.element;
+        };
+
+        // 遍历方法的实现
+        // 正向遍历的方法
+        DoublyLinkedList.prototype.forwardString = function () {
+          var current = this.head;
+          var forwardStr = "";
+
+          while (current) {
+            forwardStr += "," + current.element;
+            current = current.next;
+          }
+
+          return forwardStr.slice(1);
+        };
+
+        // 反向遍历的方法
+        DoublyLinkedList.prototype.reverseString = function () {
+          var current = this.tail;
+          var reverseStr = "";
+
+          while (current) {
+            reverseStr += "," + current.element;
+            current = current.prev;
+          }
+
+          return reverseStr.slice(1);
+        };
+
+        // 实现toString方法
+        DoublyLinkedList.prototype.toString = function () {
+          return this.forwardString();
+        };
+      }
+
+      var list = new DoublyLinkedList("abc", "acb", "bac", "bca", "cba", "cab");
+      list.append("abcd");
+      // console.log(list.getTail());
+
+      // 创建对象的构造函数
+      function Person() {
+        function foo() {
+          console.log("1");
+        }
+      }
+
+      // 通过原型对象来设置一些属性和值
+      Person.prototype.name = "Coderwhy";
+      Person.prototype.age = 18;
+      Person.prototype.height = 1.88;
+      Person.prototype.sayHello = function () {
+        foo();
+      };
+
+      // 创建两个对象, 并且调用方法
+      var person1 = new Person();
+      var person2 = new Person();
+
+      person1.sayHello();
+    </script> -->
+    <script></script>
+  </body>
+</html>
