@@ -166,15 +166,77 @@
       //     console.log(v);
       //   }
 
-      let es6 = {
-        edition: 6,
-        committee: "tsdfs",
-        standard: "sfsdfds",
-      };
+      // let es6 = {
+      //   edition: 6,
+      //   committee: "tsdfs",
+      //   standard: "sfsdfds",
+      // };
 
-      for (var key of Object.keys(someObject)) {
-        console.log(key + ": " + someObject[key]);
+      // for (var key of Object.keys(someObject)) {
+      //   console.log(key + ": " + someObject[key]);
+      // }
+
+      // function* gen2() {
+      //   yield ["a", "b", "c", "d"];
+      // }
+      // for (let a of gen2()) {
+      //   console.log(a);
+      // }
+
+      // var foo = function* foo() {
+      //   try {
+      //     yield console.log("1");
+      //     yield console.log("2");
+      //   } catch (e) {
+      //     console.log("inside err");
+      //   }
+      //   yield console.log("3");
+      //   yield console.log("4");
+      // };
+      // var g = foo();
+      // g.next();
+      // g.throw();
+      // g.next();
+
+      function analogAsync(n) {
+        return new Promise((resolve) => {
+          setTimeout(() => resolve(n + 500), n);
+        });
       }
+
+      function fn1(n) {
+        console.log(`step1 with ${n}`);
+        return analogAsync(n);
+      }
+
+      function fn2(n) {
+        console.log(`step2 with ${n}`);
+        return analogAsync(n);
+      }
+
+      function fn3(n) {
+        console.log(`step3 with ${n}`);
+        return analogAsync(n);
+      }
+
+      // function fn() {
+      //   let time1 = 0;
+      //   fn1(time1)
+      //     .then((time2) => fn2(time2))
+      //     .then((time3) => fn3(time3))
+      //     .then((res) => {
+      //       console.log(`result is ${res}`);
+      //     });
+      // }
+
+      async function foo() {
+        let time1 = 0;
+        let time2 = await fn1(time1);
+        let time3 = await fn2(time2);
+        let res = await fn3(time3);
+        console.log(res);
+      }
+      foo();
     </script>
   </body>
 </html>
