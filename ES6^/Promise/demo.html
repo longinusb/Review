@@ -58,7 +58,7 @@
 
         //回调执行
         let p2 = new Promise((resolve, reject) => {
-          if (_this.state === "pending") {
+          if (this.state === "pending") {
             this.onResolvedCallbacks.push(() => {
               setTimeout(() => {
                 try {
@@ -81,7 +81,7 @@
             });
           }
 
-          if (_this.state === "resolved") {
+          if (this.state === "resolved") {
             setTimeout(() => {
               try {
                 //拿到返回值resolve出去
@@ -93,10 +93,10 @@
             }, 0);
           }
 
-          if (_this.state === "rejected") {
+          if (this.state === "rejected") {
             setTimeout(() => {
               try {
-                let x = onFulfilled(this.reason);
+                let x = onRejected(this.reason);
                 resolve(x);
               } catch (e) {
                 reject(e);

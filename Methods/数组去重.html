@@ -26,6 +26,44 @@
       //     }
       //     return res;
       //   }
+      var array = ["1", "2", "2", "1", "1", "3"];
+      function unique(array, isSorted, iteratee) {
+        let res = [];
+        let seen = [];
+
+        for (let i = 0, len = sortArray.length; i < len; i++) {
+          let current = array[i];
+          if (isSorted) {
+            let sortArray = array.concat().sort();
+
+            if (!i || seen !== sortArray[i]) {
+              res.push(sortArray[i]);
+            }
+            seen = sortArray[i];
+          } else {
+            if (res.indexOf(current) === -1) {
+              res.push(array[i]);
+            }
+          }
+          return res;
+        }
+      }
+
+      function unique1(array, isSorted) {
+        if (!isSorted) {
+          let res = array.filter((item, index, array) => {
+            return array.indexOf(item) === index;
+          });
+          return res;
+        } else {
+          return array
+            .concat()
+            .sort()
+            .filter((item, index, array) => {
+              return !index || item !== array[index - 1];
+            });
+        }
+      }
 
       //   console.log(unique(array)); // [1, "1"]
 

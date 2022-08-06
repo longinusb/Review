@@ -6,23 +6,110 @@
     <title>Document</title>
   </head>
   <body>
+    <div>
+      <ul id="name"></ul>
+    </div>
     <script>
-      class Emitter {
-        constructor() {
-          this._listener = [];
-        }
+      // class Emitter {
+      //   constructor() {
+      //     this._listener = [];
+      //   }
 
-        on(type, fn) {
-          this._listener[type]
-            ? this._listener[type].push(fn)
-            : (this._listener[type] = [fn]);
-        }
+      //   on(type, fn) {
+      //     this._listener[type]
+      //       ? this._listener[type].push(fn)
+      //       : (this._listener[type] = [fn]);
+      //   }
 
-        trigger(type, ...rest) {
-          if (!this._listener[type]) return;
-          this._listener[type].forEach((callback) => callback(...rest));
-        }
-      }
+      //   trigger(type, ...rest) {
+      //     if (!this._listener[type]) return;
+      //     this._listener[type].forEach((callback) => callback(...rest));
+      //   }
+      // }
+
+      //1、all: 布尔全等判断
+      // const all = (arr, fn) => arr.every(fn);
+
+      // let a = all([4, 3, 3], (x) => x > 1);
+
+      //2、allEqual: 检查数组各项相等
+      // const allEqual = (arr) => arr.every((val) => val === arr[0]);
+
+      //3、approximatelyEqual: 约等于
+      // const approximatelyEqual = (v1, v2, epsilon = 0.001) =>
+      //   Math.abs(v1 - v2) < epsilon;
+
+      // let a = approximatelyEqual(0.004, 0.003);
+
+      //4、arrayToCSV: 数组转CSV格式（带空格的字符串）
+      // const arrayToCSV = (arr, delimiter = ",") =>
+      //   arr.map((v) => v.map((x) => `"${x}"`).join(delimiter)).join("\n");
+
+      // let a = arrayToCSV(
+      //   [
+      //     ["a", "b"],
+      //     ["c", "b"],
+      //   ],
+      //   "$"
+      // );
+
+      //5、arrayToHtmlList: 数组转li列表
+      // const arrayToHtmlList = (arr, listID) =>
+      //   ((el) => (
+      //     (el = document.querySelector("#" + listID)),
+      //     (el.innerHTML += arr.map((item) => `<li>${item}</li>`).join(""))
+      //   ))();
+
+      // arrayToHtmlList(["item 1", "item 2"], "name");
+
+      //6、average: 平均数
+      // const average = (...nums) => nums.reduce((acc, val) => acc + val, 0) / nums.length;
+
+      // let a = average(...[1, 2, 3]);
+
+      //7、averageBy: 数组对象属性平均数
+      // const averageBy = (arr, fn) =>
+      //   arr
+      //     .map(typeof fn === "function" ? fn : (val) => val[fn])
+      //     .reduce((acc, val) => acc + val, 0) / arr.length;
+      // let a = averageBy([{ n: 4 }, { n: 2 }, { n: 8 }, { n: 6 }], (o) => o.n);
+
+      //8、bifurcate: 拆分断言后的数组
+      // const bifurcate = (arr, filter) =>
+      //   arr.reduce((acc, val, i) => (acc[filter[i] ? 0 : 1].push(val), acc), [
+      //     [],
+      //     [],
+      //   ]);
+
+      //9、castArray: 其他类型转数组
+      // const castArray = (val) => (Array.isArray(val) ? val : [val]);
+      // let obj = { foo: 11, baz: 42 };
+      // let a = Object.values(obj);
+      // let b = a.forEach((element) => {
+      //   Array.isArray(element) ? element : [element];
+      // });
+
+      //10、compact: 去除数组中的无效/无用值
+      // const compact = (arr) => arr.filter(Boolean);
+
+      //11、count0ccurrences: 检测数值出现次数
+      // const count0ccurrences = (arr, val) =>
+      //   arr.reduce((a, v) => (v === val ? a + 1 : a), 0);
+
+      //12、deepFlatten: 递归扁平化数组
+      // const deepFlatten = (arr) =>
+      //   [].concat(...arr.map((v) => (Array.isArray(v) ? deepFlatten(v) : v)));
+
+      // let a = deepFlatten([1, [2], [[3], 4], 5]);
+
+      //13、difference: 寻找差异（并返回第一个数组独有的）
+      // const difference = (a, b) => {
+      //   const s = new Set(b);
+      //   return a.filter((x) => !s.has(x));
+      // };
+      // let a = difference([1, 2, 3], [1, 2, 4]);
+
+      console.log(a);
     </script>
   </body>
 </html>
