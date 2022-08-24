@@ -14,7 +14,7 @@
             closable
           >
             <span slot="label" v-show="!isEdit">{{ item.title }}</span>
-            <input
+            <el-input
               slot="label"
               type="text"
               v-show="isEdit"
