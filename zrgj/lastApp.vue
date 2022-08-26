@@ -53,7 +53,6 @@ export default {
             this.editableTabs.push({
               title: value,
               name: newTabName,
-              content: "New Tab content",
             });
             this.editableTabsValue = newTabName;
             this.$message({
@@ -92,8 +91,6 @@ export default {
           }
           this.editableTabsValue = activeName;
           this.editableTabs = tabs.filter((tab) => tab.name !== targetName);
-
-          console.log(this.editableTabsValue);
         }
       }
     },
