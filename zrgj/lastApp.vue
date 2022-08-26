@@ -6,16 +6,14 @@
       editable
       @edit="handleTabsEdit"
       :before-leave="beforeLeave"
-      @tab-remove="tabRemove"
     >
       <el-tab-pane
         :key="item.name"
         v-for="(item, index) in editableTabs"
         :label="item.title"
         :name="item.name"
-        :closable="clsBoolean"
       >
-        <my-table ref="child"></my-table>
+        <my-table :ref="'child' + item.name"></my-table>
       </el-tab-pane>
     </el-tabs>
   </div>
@@ -34,12 +32,10 @@ export default {
         {
           title: "Tab 1",
           name: "1",
-          content: "Tab 1 content",
         },
         {
           title: "Tab 2",
           name: "2",
-          content: "Tab 2 content",
         },
       ],
       tabIndex: 2,
@@ -73,65 +69,36 @@ export default {
           });
       }
       if (action === "remove") {
-        let tabs = this.editableTabs;
-        let activeName = this.editableTabsValue;
-        if (activeName === targetName) {
-          tabs.forEach((tab, index) => {
-            if (tab.name === targetName) {
-              let nextTab = tabs[index + 1] || tabs[index - 1];
-              if (nextTab) {
-                activeName = nextTab.name;
-              }
-            }
+        if (
+          eval("this.$refs.child" + targetName)[0].forms.tableData.length > 0
+        ) {
+          this.$notify({
+            title: "警告",
+            message: "这是一条警告的提示消息",
+            type: "warning",
           });
-        }
+        } else {
+          let tabs = this.editableTabs;
+          let activeName = this.editableTabsValue;
+          if (activeName === targetName) {
+            tabs.forEach((tab, index) => {
+              if (tab.name === targetName) {
+                let nextTab = tabs[index + 1] || tabs[index - 1];
+                if (nextTab) {
+                  activeName = nextTab.name;
+                }
+              }
+            });
+          }
+          this.editableTabsValue = activeName;
+          this.editableTabs = tabs.filter((tab) => tab.name !== targetName);
 
-        this.editableTabsValue = activeName;
-        this.editableTabs = tabs.filter((tab) => tab.name !== targetName);
+          console.log(this.editableTabsValue);
+        }
       }
     },
-    beforeLeave(newTab, oldTab) {
-      if (this.$refs.child[0].forms.tableData.length > 0) {
-        this.$notify({
-          title: "警告",
-          message: "这是一条警告的提示消息",
-          type: "warning",
-        });
-      }
-    },
-    tabRemove() {
-      if (this.$refs.child[0].forms.tableData.length > 0) {
-        this.$notify({
-          title: "警告",
-          message: "这是一条警告的提示消息",
-          type: "warning",
-        });
-      }
-      // this.clickHandle();
-    },
-    clickHandle() {
-      // 获取子组件的 state
-      console.log(
-        "this is child state: ",
-        this.$refs.child[0].forms.tableData.length
-      );
-      // 获取子组件的方法
-      // this.refs.child.say();
-    },
-    clsBoolean() {
-      return !this.$refs.child[0].forms.tableData.length > 0;
-    },
+    beforeLeave(newTab, oldTab) {},
   },
 };
 </script>
-<style scoped>
-.formData {
-  padding: 20px;
-}
-.el-form-item {
-  margin-bottom: 0;
-}
-.demo-ruleForm {
-  margin: 20px 0;
-}
-</style>
+<style scoped></style>
