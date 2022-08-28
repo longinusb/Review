@@ -3,8 +3,7 @@
     <el-button type="primary" @click="handleAddParent">添加</el-button>
     <el-form :model="forms" ref="forms" :rules="tableRules">
       <el-table :data="forms.tableData" row-key="idx" default-expand-all>
-        <el-table-column prop="idx" width="100" label="" align="center">
-        </el-table-column>
+        <el-table-column prop="idx" label="" align="center"> </el-table-column>
         <el-table-column prop="id" label="序号">
           <template slot-scope="{ row }">
             <span v-show="!row.editable">{{ row.id }}</span>
@@ -17,15 +16,15 @@
             </el-form-item>
           </template>
         </el-table-column>
-        <el-table-column prop="date" label="环节">
+        <el-table-column prop="name" label="环节">
           <template slot-scope="{ row }">
-            <span v-show="!row.editable">{{ row.date }}</span>
+            <span v-show="!row.editable">{{ row.name }}</span>
             <el-form-item
               v-show="row.editable"
-              :prop="computedProps(row.idx, 'date')"
-              :rules="tableRules.date"
+              :prop="computedProps(row.idx, 'name')"
+              :rules="tableRules.name"
             >
-              <el-input v-model="row.date"></el-input>
+              <el-input v-model="row.name"></el-input>
             </el-form-item>
           </template>
         </el-table-column>
@@ -74,11 +73,18 @@
 </template>
 
 <script>
+import { bfs } from "../treeTransfer";
 export default {
+  props: {
+    tableData1: {
+      type: Array,
+      default: [],
+    },
+  },
   data() {
     return {
       forms: {
-        tableData: [],
+        tableData: this.tableData1,
       },
       tableRules: {
         id: [
@@ -88,7 +94,7 @@ export default {
             trigger: ["blur", "change"],
           },
         ],
-        date: [
+        name: [
           {
             required: true,
             message: "请输入环节",
@@ -106,31 +112,21 @@ export default {
     };
   },
   created() {
-    this.forms.tableData = [
-      {
-        id: "7364828349",
-        date: "测试数据1",
-        action: "123",
-        children: null,
-        editable: false,
-        isAdd: false,
-      },
-    ];
+    //初始化数据
     this.initData();
   },
-  computed: {},
   methods: {
-    //TODO 初始化数据，赋初始值idx、children、editable
+    //初始化数据
     initData() {
       const getIndex = (data, index, parent) => {
         let num = index + 1;
-        if (parent != 0) {
+        if (parent != "") {
           data.idx = parent + "." + num;
         } else {
           data.idx = num + "";
         }
         if (data.children) {
-          data.children.map((item, idx) => getIndex(item, idx, num));
+          data.children.map((item, idx) => getIndex(item, idx, data.idx));
         }
       };
       this.forms.tableData.map((item, index) => getIndex(item, index, 0));
@@ -140,7 +136,7 @@ export default {
       return {
         idx: idx + "",
         id: "",
-        date: "",
+        name: "",
         action: "",
         children: null,
         editable: true,
@@ -192,7 +188,7 @@ export default {
     handleConfirm(row) {
       let errorMessage = false;
       let idxStr = this.computedIndex(row.idx);
-      let colIndex = [idxStr + "id", idxStr + "date", idxStr + "action"];
+      let colIndex = [idxStr + "id", idxStr + "name", idxStr + "action"];
       this.$refs["forms"].validateField(colIndex, (valid) => {
         if (valid != "") {
           errorMessage = true; //有一个验证不成功就不在继续执行
@@ -223,6 +219,17 @@ export default {
         });
         return children;
       }
+    },
+    //当前页面编辑状态
+    computedEditable() {
+      let flag = true;
+      for (let i = 0; i < this.forms.tableData.length; i++) {
+        if (bfs(this.forms.tableData[i])) {
+          flag = false;
+          break;
+        }
+      }
+      return flag;
     },
   },
 };
