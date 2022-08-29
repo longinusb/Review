@@ -21,19 +21,10 @@
       </el-tab-pane>
     </el-tabs>
     <el-dialog title="收货地址" :visible.sync="dialogFormVisible">
-      <el-form :model="editableTabs[editableTabsValue - 1]">
-        <el-form-item label="活动名称" :label-width="formLabelWidth">
-          <el-input
-            v-model="editableTabs[editableTabsValue - 1].title"
-            autocomplete="off"
-          ></el-input>
-        </el-form-item>
-      </el-form>
+      <el-input v-model="tabTitle"></el-input>
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogFormVisible = false">取 消</el-button>
-        <el-button type="primary" @click="dialogFormVisible = false"
-          >确 定</el-button
-        >
+        <el-button type="primary" @click="handleSaveTitle">确 定</el-button>
       </div>
     </el-dialog>
   </div>
@@ -46,14 +37,25 @@ import { getTreeData } from "./treeTransfer";
 export default {
   components: { MyTableTest },
   name: "",
-  computed: {},
   data() {
     return {
       formLabelWidth: "120px",
       dialogFormVisible: false,
       tableData: [],
-      editableTabsValue: "2",
-      editableTabs: [
+      editableTabsValue: "",
+      editableTabs: [],
+      tabIndex: 0,
+      tabTitle: "",
+    };
+  },
+  created() {
+    this.getTabData();
+    this.getData();
+  },
+  methods: {
+    //获取Tab数据
+    getTabData() {
+      this.editableTabs = [
         {
           title: "Tab 1",
           name: "1",
@@ -62,14 +64,26 @@ export default {
           title: "Tab 2",
           name: "2",
         },
-      ],
-      tabIndex: 2,
-    };
-  },
-  created() {
-    this.getData();
-  },
-  methods: {
+      ];
+      this.editableTabsValue = this.editableTabs[
+        this.editableTabs.length - 1
+      ].name;
+      this.tabIndex = this.editableTabs.length;
+      this.getCurTabTitle(this.editableTabsValue);
+    },
+    //重置当前页面title
+    getCurTabTitle(val) {
+      this.tabTitle = this.editableTabs.find((item) => {
+        return item.name === val;
+      }).title;
+    },
+    //保存表格
+    handleSaveTitle() {
+      this.editableTabs.find((item) => {
+        return item.name === this.editableTabsValue;
+      }).title = this.tabTitle;
+      this.dialogFormVisible = false;
+    },
     //获取表格数据
     getData() {
       let temp = [
@@ -143,7 +157,10 @@ export default {
       }
     },
     beforeLeave(newTab, oldTab) {
+      console.log(newTab);
+
       if (eval("this.$refs.child" + oldTab)[0].computedEditable()) {
+        this.getCurTabTitle(newTab);
         return true;
       } else {
         this.$notify({
