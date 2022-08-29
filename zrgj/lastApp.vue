@@ -32,7 +32,6 @@
 
 <script>
 import MyTableTest from "./components/my-tableTest.vue";
-import myTable from "./components/my-tableTest.vue";
 import { getTreeData } from "./treeTransfer";
 export default {
   components: { MyTableTest },
@@ -58,13 +57,14 @@ export default {
       this.editableTabs = [
         {
           title: "Tab 1",
-          name: "1",
         },
         {
           title: "Tab 2",
-          name: "2",
         },
       ];
+      this.editableTabs.map((item, index) => {
+        item.name = index + 1;
+      });
       this.editableTabsValue = this.editableTabs[
         this.editableTabs.length - 1
       ].name;
@@ -157,8 +157,6 @@ export default {
       }
     },
     beforeLeave(newTab, oldTab) {
-      console.log(newTab);
-
       if (eval("this.$refs.child" + oldTab)[0].computedEditable()) {
         this.getCurTabTitle(newTab);
         return true;
