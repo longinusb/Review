@@ -3,7 +3,8 @@
     <el-button type="primary" @click="handleAddParent">添加</el-button>
     <el-form :model="forms" ref="forms" :rules="tableRules">
       <el-table :data="forms.tableData" row-key="idx" default-expand-all>
-        <el-table-column prop="idx" label="" align="center"> </el-table-column>
+        <el-table-column prop="idx" width="120" align="center">
+        </el-table-column>
         <el-table-column prop="id" label="序号">
           <template slot-scope="{ row }">
             <span v-show="!row.editable">{{ row.id }}</span>
@@ -25,18 +26,6 @@
               :rules="tableRules.name"
             >
               <el-input v-model="row.name"></el-input>
-            </el-form-item>
-          </template>
-        </el-table-column>
-        <el-table-column prop="action" label="动作">
-          <template slot-scope="{ row }">
-            <span v-show="!row.editable">{{ row.action }}</span>
-            <el-form-item
-              v-show="row.editable"
-              :prop="computedProps(row.idx, 'action')"
-              :rules="tableRules.action"
-            >
-              <el-input v-model="row.action"></el-input>
             </el-form-item>
           </template>
         </el-table-column>
@@ -79,6 +68,9 @@ export default {
     senNo: {
       type: String,
     },
+    version: {
+      type: String,
+    },
   },
   data() {
     return {
@@ -100,13 +92,6 @@ export default {
             trigger: ["blur", "change"],
           },
         ],
-        action: [
-          {
-            required: true,
-            message: "请输入动作",
-            trigger: ["blur", "change"],
-          },
-        ],
       },
     };
   },
@@ -116,10 +101,10 @@ export default {
     this.initData();
   },
   methods: {
-    //获取表格数据
-    getData() {
-      console.log(this.senNo);
-      let temp = [
+    //接口
+    tableRequest() {
+      console.log(this.senNo, this.version);
+      return [
         { id: "1", parentId: null, name: "节点1" },
         { id: "1.1", parentId: "1", name: "节点1-1" },
         { id: "1.1.1", parentId: "1.1", name: "节点1-1-1" },
@@ -129,6 +114,10 @@ export default {
         { id: "2.2.1", parentId: "2.2", name: "节点2-2-1" },
         { id: "3", parentId: null, name: "节点3" },
       ];
+    },
+    //获取表格数据
+    getData() {
+      let temp = this.tableRequest();
       temp.map((item) => {
         item.children = null;
         item.editable = false;
@@ -140,7 +129,7 @@ export default {
     initData() {
       const getIndex = (data, index, parent) => {
         let num = index + 1;
-        if (parent != "") {
+        if (parent !== "") {
           data.idx = parent + "." + num;
         } else {
           data.idx = num + "";
@@ -149,7 +138,7 @@ export default {
           data.children.map((item, idx) => getIndex(item, idx, data.idx));
         }
       };
-      this.forms.tableData.map((item, index) => getIndex(item, index, 0));
+      this.forms.tableData.map((item, index) => getIndex(item, index, ""));
     },
     //新一行数据
     newRowInfo(idx) {
@@ -157,7 +146,6 @@ export default {
         idx: idx + "",
         id: "",
         name: "",
-        action: "",
         children: null,
         editable: true,
         isAdd: true,
@@ -208,7 +196,7 @@ export default {
     handleConfirm(row) {
       let errorMessage = false;
       let idxStr = this.computedIndex(row.idx);
-      let colIndex = [idxStr + "id", idxStr + "name", idxStr + "action"];
+      let colIndex = [idxStr + "id", idxStr + "name"];
       this.$refs["forms"].validateField(colIndex, (valid) => {
         if (valid != "") {
           errorMessage = true; //有一个验证不成功就不在继续执行

@@ -16,7 +16,8 @@
       >
         <my-table-test
           :ref="'child' + item.name"
-          :senNo="tabTitle"
+          :senNo="item.title"
+          :version="item.version"
         ></my-table-test>
       </el-tab-pane>
     </el-tabs>
@@ -39,7 +40,6 @@ export default {
     return {
       formLabelWidth: "120px",
       dialogFormVisible: false,
-      tableData: [],
       editableTabsValue: "",
       editableTabs: [],
       tabIndex: 0,
@@ -50,16 +50,22 @@ export default {
     this.getTabData();
   },
   methods: {
-    //获取Tab数据
-    getTabData() {
-      this.editableTabs = [
+    //接口
+    tabRequest() {
+      return [
         {
           title: "Tab 1",
+          version: "1.0",
         },
         {
           title: "Tab 2",
+          version: "1.0",
         },
       ];
+    },
+    //获取Tab数据
+    getTabData() {
+      this.editableTabs = this.tabRequest();
       this.editableTabs.map((item, index) => {
         item.name = index + 1 + "";
       });
