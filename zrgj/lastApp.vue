@@ -16,7 +16,7 @@
       >
         <my-table-test
           :ref="'child' + item.name"
-          :tableData1="tableData"
+          :senNo="tabTitle"
         ></my-table-test>
       </el-tab-pane>
     </el-tabs>
@@ -32,7 +32,6 @@
 
 <script>
 import MyTableTest from "./components/my-tableTest.vue";
-import { getTreeData } from "./treeTransfer";
 export default {
   components: { MyTableTest },
   name: "",
@@ -49,7 +48,6 @@ export default {
   },
   created() {
     this.getTabData();
-    this.getData();
   },
   methods: {
     //获取Tab数据
@@ -63,7 +61,7 @@ export default {
         },
       ];
       this.editableTabs.map((item, index) => {
-        item.name = index + 1;
+        item.name = index + 1 + "";
       });
       this.editableTabsValue = this.editableTabs[
         this.editableTabs.length - 1
@@ -83,25 +81,6 @@ export default {
         return item.name === this.editableTabsValue;
       }).title = this.tabTitle;
       this.dialogFormVisible = false;
-    },
-    //获取表格数据
-    getData() {
-      let temp = [
-        { id: "1", parentId: null, name: "节点1" },
-        { id: "1.1", parentId: "1", name: "节点1-1" },
-        { id: "1.1.1", parentId: "1.1", name: "节点1-1-1" },
-        { id: "2", parentId: null, name: "节点2" },
-        { id: "2.1", parentId: "2", name: "节点2-1" },
-        { id: "2.2", parentId: "2", name: "节点2-2" },
-        { id: "2.2.1", parentId: "2.2", name: "节点2-2-1" },
-        { id: "3", parentId: null, name: "节点3" },
-      ];
-      temp.map((item) => {
-        item.children = null;
-        item.editable = false;
-        item.isAdd = false;
-      });
-      this.tableData = getTreeData(temp);
     },
     //编辑Tab
     handleTabsEdit(targetName, action) {

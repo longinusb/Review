@@ -73,18 +73,17 @@
 </template>
 
 <script>
-import { bfs } from "../treeTransfer";
+import { getTreeData, bfs } from "../treeTransfer";
 export default {
   props: {
-    tableData1: {
-      type: Array,
-      default: [],
+    senNo: {
+      type: String,
     },
   },
   data() {
     return {
       forms: {
-        tableData: this.tableData1,
+        tableData: [],
       },
       tableRules: {
         id: [
@@ -112,10 +111,31 @@ export default {
     };
   },
   created() {
+    this.getData();
     //初始化数据
     this.initData();
   },
   methods: {
+    //获取表格数据
+    getData() {
+      console.log(this.senNo);
+      let temp = [
+        { id: "1", parentId: null, name: "节点1" },
+        { id: "1.1", parentId: "1", name: "节点1-1" },
+        { id: "1.1.1", parentId: "1.1", name: "节点1-1-1" },
+        { id: "2", parentId: null, name: "节点2" },
+        { id: "2.1", parentId: "2", name: "节点2-1" },
+        { id: "2.2", parentId: "2", name: "节点2-2" },
+        { id: "2.2.1", parentId: "2.2", name: "节点2-2-1" },
+        { id: "3", parentId: null, name: "节点3" },
+      ];
+      temp.map((item) => {
+        item.children = null;
+        item.editable = false;
+        item.isAdd = false;
+      });
+      this.forms.tableData = getTreeData(temp);
+    },
     //初始化数据
     initData() {
       const getIndex = (data, index, parent) => {
