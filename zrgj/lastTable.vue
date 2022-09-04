@@ -1,11 +1,26 @@
 <template>
   <div>
     <el-button type="primary" @click="handleAddParent">添加</el-button>
+    <span>版本号：</span>
+    <el-select v-model="value" placeholder="请选择" @change="selectVersion">
+      <el-option
+        v-for="item in versionData"
+        :key="item.value"
+        :label="item.label"
+        :value="item.value"
+      >
+      </el-option>
+    </el-select>
+
     <el-form :model="forms" ref="forms" :rules="tableRules">
       <el-table :data="forms.tableData" row-key="idx" default-expand-all>
-        <el-table-column prop="idx" width="120" align="center">
-        </el-table-column>
-        <el-table-column prop="id" label="序号">
+        <el-table-column prop="idx"> </el-table-column>
+        <el-table-column
+          prop="id"
+          label="序号"
+          :filters="versionData2"
+          :filter-method="filterHandler"
+        >
           <template slot-scope="{ row }">
             <span v-show="!row.editable">{{ row.id }}</span>
             <el-form-item
@@ -93,17 +108,50 @@ export default {
           },
         ],
       },
+      version1: [1, 2, 3],
+      versionData: [],
+      versionData2: [],
+      value: "",
     };
   },
   created() {
     this.getData();
     //初始化数据
     this.initData();
+    this.versionTransfer1(this.version1);
+    this.versionTransfer2(this.version1);
   },
   methods: {
+    selectVersion(val) {
+      this.filterHandler(val);
+    },
+    filterHandler(value, row, column) {
+      const property = column["property"];
+      return row[property] === value;
+    },
+    versionTransfer1(ele) {
+      let obj = {};
+      for (let key in ele) {
+        obj[key] = ele[key];
+      }
+      return (this.versionData = Object.keys(obj).map((val) => ({
+        label: obj[val],
+        value: obj[val],
+      })));
+    },
+    versionTransfer2(ele) {
+      let obj = {};
+      for (let key in ele) {
+        obj[key] = ele[key];
+      }
+      return (this.versionData2 = Object.keys(obj).map((val) => ({
+        text: obj[val] + "",
+        value: obj[val] + "",
+      })));
+    },
     //接口
     tableRequest() {
-      console.log(this.senNo, this.version);
+      // console.log(this.senNo, this.version);
       return [
         { id: "1", parentId: null, name: "节点1" },
         { id: "1.1", parentId: "1", name: "节点1-1" },
@@ -119,7 +167,7 @@ export default {
     getData() {
       let temp = this.tableRequest();
       temp.map((item) => {
-        item.children = null;
+        item.children = [];
         item.editable = false;
         item.isAdd = false;
       });
@@ -146,7 +194,7 @@ export default {
         idx: idx + "",
         id: "",
         name: "",
-        children: null,
+        children: [],
         editable: true,
         isAdd: true,
       };
@@ -176,7 +224,7 @@ export default {
     //删除 重置序号
     handleDel(row) {
       let indexs = row.idx.split(".");
-      console.log(indexs);
+      // console.log(indexs);
       if (indexs.length == 1) {
         this.forms.tableData.splice(parseInt(indexs[0]) - 1, 1);
       } else if (indexs.length > 1) {
