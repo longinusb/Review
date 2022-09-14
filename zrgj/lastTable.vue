@@ -11,33 +11,15 @@
       >
       </el-option>
     </el-select>
-
     <el-form :model="forms" ref="forms" :rules="tableRules">
-      <el-table :data="forms.tableData" row-key="idx" default-expand-all>
-        <el-table-column prop="idx"> </el-table-column>
-        <el-table-column
-          prop="id"
-          label="序号"
-          :filters="versionData2"
-          :filter-method="filterHandler"
-        >
-          <template slot-scope="{ row }">
-            <span v-show="!row.editable">{{ row.id }}</span>
-            <el-form-item
-              v-show="row.editable"
-              :prop="computedProps(row.idx, 'id')"
-              :rules="tableRules.id"
-            >
-              <el-input v-model="row.id"></el-input>
-            </el-form-item>
-          </template>
-        </el-table-column>
+      <el-table :data="forms.tableData" row-key="businessNo" default-expand-all>
+        <el-table-column prop="businessNo"> </el-table-column>
         <el-table-column prop="name" label="环节">
           <template slot-scope="{ row }">
             <span v-show="!row.editable">{{ row.name }}</span>
             <el-form-item
               v-show="row.editable"
-              :prop="computedProps(row.idx, 'name')"
+              :prop="computedProps(row.businessNo, 'name')"
               :rules="tableRules.name"
             >
               <el-input v-model="row.name"></el-input>
@@ -77,7 +59,7 @@
 </template>
 
 <script>
-import { getTreeData, bfs } from "../treeTransfer";
+import { getTreedata, bfs } from "../treeTransfer";
 export default {
   props: {
     senNo: {
@@ -93,13 +75,6 @@ export default {
         tableData: [],
       },
       tableRules: {
-        id: [
-          {
-            required: true,
-            message: "请输入序号",
-            trigger: ["blur", "change"],
-          },
-        ],
         name: [
           {
             required: true,
@@ -153,14 +128,15 @@ export default {
     tableRequest() {
       // console.log(this.senNo, this.version);
       return [
-        { id: "1", parentId: null, name: "节点1" },
-        { id: "1.1", parentId: "1", name: "节点1-1" },
-        { id: "1.1.1", parentId: "1.1", name: "节点1-1-1" },
-        { id: "2", parentId: null, name: "节点2" },
-        { id: "2.1", parentId: "2", name: "节点2-1" },
-        { id: "2.2", parentId: "2", name: "节点2-2" },
-        { id: "2.2.1", parentId: "2.2", name: "节点2-2-1" },
-        { id: "3", parentId: null, name: "节点3" },
+        { businessNo: "1.1.1", parentId: "1.1", name: "节点1-1-1" },
+        { businessNo: "1", parentId: null, name: "节点1" },
+        { businessNo: "1.1", parentId: "1", name: "节点1-1" },
+        { businessNo: "2.2.1", parentId: "2.2", name: "节点2-2-1" },
+        { businessNo: "2.2", parentId: "2", name: "节点2-2" },
+        { businessNo: "2", parentId: null, name: "节点2" },
+        { businessNo: "2.1", parentId: "2", name: "节点2-1" },
+        { businessNo: "3", parentId: null, name: "节点3" },
+        { businessNo: "4.1", parentId: null, name: "节点3" },
       ];
     },
     //获取表格数据
@@ -171,28 +147,29 @@ export default {
         item.editable = false;
         item.isAdd = false;
       });
-      this.forms.tableData = getTreeData(temp);
+      this.forms.tableData = getTreedata(temp);
     },
     //初始化数据
     initData() {
       const getIndex = (data, index, parent) => {
         let num = index + 1;
         if (parent !== "") {
-          data.idx = parent + "." + num;
+          data.businessNo = parent + "." + num;
         } else {
-          data.idx = num + "";
+          data.businessNo = num + "";
         }
         if (data.children) {
-          data.children.map((item, idx) => getIndex(item, idx, data.idx));
+          data.children.map((item, idx) =>
+            getIndex(item, idx, data.businessNo)
+          );
         }
       };
       this.forms.tableData.map((item, index) => getIndex(item, index, ""));
     },
     //新一行数据
-    newRowInfo(idx) {
+    newRowInfo(businessNo) {
       return {
-        idx: idx + "",
-        id: "",
+        businessNo: businessNo + "",
         name: "",
         children: [],
         editable: true,
@@ -207,13 +184,13 @@ export default {
     },
     //新增子级
     handleAddChild(row) {
-      let idx = 1;
+      let businessNo = 1;
       if (!row.children) {
         row.children = new Array();
       } else {
-        idx = row.children.length + 1;
+        businessNo = row.children.length + 1;
       }
-      row.children.push(this.newRowInfo(row.idx + "." + idx));
+      row.children.push(this.newRowInfo(row.businessNo + "." + businessNo));
     },
     //编辑
     handleEdit(row) {
@@ -223,7 +200,7 @@ export default {
     handleCancel(row) {},
     //删除 重置序号
     handleDel(row) {
-      let indexs = row.idx.split(".");
+      let indexs = row.businessNo.split(".");
       // console.log(indexs);
       if (indexs.length == 1) {
         this.forms.tableData.splice(parseInt(indexs[0]) - 1, 1);
@@ -243,8 +220,8 @@ export default {
     //提交
     handleConfirm(row) {
       let errorMessage = false;
-      let idxStr = this.computedIndex(row.idx);
-      let colIndex = [idxStr + "id", idxStr + "name"];
+      let businessNoStr = this.computedIndex(row.businessNo);
+      let colIndex = [businessNoStr + "id", businessNoStr + "name"];
       this.$refs["forms"].validateField(colIndex, (valid) => {
         if (valid != "") {
           errorMessage = true; //有一个验证不成功就不在继续执行
@@ -256,12 +233,12 @@ export default {
       }
     },
     //计算每个单元格的props
-    computedProps(idx, str) {
-      return this.computedIndex(idx) + str;
+    computedProps(businessNo, str) {
+      return this.computedIndex(businessNo) + str;
     },
     //获取当前行的数据路径
-    computedIndex(idx) {
-      let indexs = (idx + "").split(".");
+    computedIndex(businessNo) {
+      let indexs = (businessNo + "").split(".");
       if (indexs.length == 1) {
         return "tableData[" + (indexs[0] - 1) + "].";
       } else if (indexs.length > 1) {

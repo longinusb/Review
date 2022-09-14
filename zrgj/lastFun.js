@@ -42,3 +42,23 @@ export function bfs(tree) {
   }
   return result;
 }
+
+export function getTreedata1(arr) {
+  const resultarr = [];
+  const temp = arr.reduce((pre, cur) => {
+    pre[cur.businessNo] = cur;
+    return pre;
+  }, {});
+  console.log(temp);
+
+  arr.forEach((item) => {
+    let parent = temp[item.parentId];
+    if (parent) {
+      (parent.children || (parent.children = [])).push(item);
+    } else {
+      resultarr.push(item);
+    }
+  });
+
+  return resultarr;
+}
