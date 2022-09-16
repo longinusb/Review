@@ -62,11 +62,16 @@
 import { getTreedata, bfs } from "../treeTransfer";
 export default {
   props: {
-    senNo: {
-      type: String,
+    tab: {
+      type: Object,
     },
-    version: {
-      type: String,
+  },
+  watch: {
+    tab: function (val) {
+      console.log(val);
+      this.senNo = val.title;
+      this.version = val.version;
+      this.initTab();
     },
   },
   data() {
@@ -90,13 +95,19 @@ export default {
     };
   },
   created() {
-    this.getData();
-    //初始化数据
-    this.initData();
-    this.versionTransfer1(this.version1);
-    this.versionTransfer2(this.version1);
+    console.log(this.tab);
+    this.senNo = this.tab.title;
+    this.version = this.tab.version;
+    this.initTab();
   },
   methods: {
+    initTab() {
+      this.getData();
+      //初始化数据
+      this.initData();
+      this.versionTransfer1(this.version1);
+      this.versionTransfer2(this.version1);
+    },
     selectVersion(val) {
       this.filterHandler(val);
     },
@@ -126,18 +137,21 @@ export default {
     },
     //接口
     tableRequest() {
-      // console.log(this.senNo, this.version);
-      return [
-        { businessNo: "1.1.1", parentId: "1.1", name: "节点1-1-1" },
-        { businessNo: "1", parentId: null, name: "节点1" },
-        { businessNo: "1.1", parentId: "1", name: "节点1-1" },
-        { businessNo: "2.2.1", parentId: "2.2", name: "节点2-2-1" },
-        { businessNo: "2.2", parentId: "2", name: "节点2-2" },
-        { businessNo: "2", parentId: null, name: "节点2" },
-        { businessNo: "2.1", parentId: "2", name: "节点2-1" },
-        { businessNo: "3", parentId: null, name: "节点3" },
-        { businessNo: "4.1", parentId: null, name: "节点3" },
-      ];
+      if (this.senNo == "Tab 2") {
+        return [
+          { businessNo: "1.1.1", parentId: "1.1", name: "节点1-1-1" },
+          { businessNo: "1", parentId: null, name: "节点1" },
+          { businessNo: "1.1", parentId: "1", name: "节点1-1" },
+          { businessNo: "2.2.1", parentId: "2.2", name: "节点2-2-1" },
+          { businessNo: "2.2", parentId: "2", name: "节点2-2" },
+          { businessNo: "2", parentId: null, name: "节点2" },
+          { businessNo: "2.1", parentId: "2", name: "节点2-1" },
+          { businessNo: "3", parentId: null, name: "节点3" },
+          { businessNo: "4.1", parentId: null, name: "节点3" },
+        ];
+      } else {
+        return [];
+      }
     },
     //获取表格数据
     getData() {

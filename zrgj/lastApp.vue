@@ -14,13 +14,12 @@
         :label="item.title"
         :name="item.name"
       >
-        <my-table-test
-          :ref="'child' + item.name"
-          :senNo="item.title"
-          :version="item.version"
-        ></my-table-test>
       </el-tab-pane>
     </el-tabs>
+    <my-table-test
+      :ref="'child' + editableTabsValue"
+      :tab="activeTab"
+    ></my-table-test>
     <el-dialog title="收货地址" :visible.sync="dialogFormVisible">
       <el-input v-model="tabTitle"></el-input>
       <div slot="footer" class="dialog-footer">
@@ -44,6 +43,7 @@ export default {
       editableTabs: [],
       tabIndex: 0,
       tabTitle: "",
+      activeTab: {},
     };
   },
   created() {
@@ -77,9 +77,10 @@ export default {
     },
     //重置当前页面title
     getCurTabTitle(val) {
-      this.tabTitle = this.editableTabs.find((item) => {
+      this.activeTab = this.editableTabs.find((item) => {
         return item.name === val;
-      }).title;
+      });
+      this.tabTitle = this.activeTab.title;
     },
     //保存表格
     handleSaveTitle() {
@@ -142,7 +143,7 @@ export default {
       }
     },
     beforeLeave(newTab, oldTab) {
-      if (eval("this.$refs.child" + oldTab)[0].computedEditable()) {
+      if (this.$refs["child" + oldTab].computedEditable()) {
         this.getCurTabTitle(newTab);
         return true;
       } else {
