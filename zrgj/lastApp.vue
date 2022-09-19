@@ -16,10 +16,7 @@
       >
       </el-tab-pane>
     </el-tabs>
-    <my-table-test
-      :ref="'child' + editableTabsValue"
-      :tab="activeTab"
-    ></my-table-test>
+    <my-table-test ref="child" :tab="activeTab"></my-table-test>
     <el-dialog title="收货地址" :visible.sync="dialogFormVisible">
       <el-input v-model="tabTitle"></el-input>
       <div slot="footer" class="dialog-footer">
@@ -116,9 +113,8 @@ export default {
           });
       }
       if (action === "remove") {
-        if (
-          eval("this.$refs.child" + targetName)[0].forms.tableData.length > 0
-        ) {
+        // console.log(this.$refs.child.forms.tableData.length > 0);
+        if (this.$refs.child.forms.tableData.length > 0) {
           this.$notify({
             title: "警告",
             message: "当前页面表格存在数据无法删除tab！",
@@ -143,7 +139,7 @@ export default {
       }
     },
     beforeLeave(newTab, oldTab) {
-      if (this.$refs["child" + oldTab].computedEditable()) {
+      if (this.$refs.child.computedEditable()) {
         this.getCurTabTitle(newTab);
         return true;
       } else {

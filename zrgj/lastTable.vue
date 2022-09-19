@@ -68,7 +68,7 @@ export default {
   },
   watch: {
     tab: function (val) {
-      console.log(val);
+      // console.log(val);
       this.senNo = val.title;
       this.version = val.version;
       this.initTab();
@@ -95,7 +95,7 @@ export default {
     };
   },
   created() {
-    console.log(this.tab);
+    // console.log(this.tab);
     this.senNo = this.tab.title;
     this.version = this.tab.version;
     this.initTab();
@@ -155,6 +155,7 @@ export default {
     },
     //获取表格数据
     getData() {
+      console.log("123");
       let temp = this.tableRequest();
       temp.map((item) => {
         item.children = [];
